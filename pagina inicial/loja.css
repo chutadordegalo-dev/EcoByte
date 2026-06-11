@@ -1,0 +1,29 @@
+/* Customizações Visuais EcoByte Shop & Shopee System */
+
+.label-pagamento-selecionado {
+    border-color: #314E3F !important;
+    background-color: #f0fdf4 !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.scrollbar-none::-webkit-scrollbar {
+    display: none;
+}
+
+#carrinho-itens::-webkit-scrollbar, #lista-pedidos-container::-webkit-scrollbar {
+    width: 4px;
+}
+#carrinho-itens::-webkit-scrollbar-thumb, #lista-pedidos-container::-webkit-scrollbar-thumb {
+    background: #A1B59C;
+    border-radius: 10px;
+}
+
+.carregando-cep {
+    animation: pulse 1.5s infinite;
+    color: #4B6A7F !important;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: .5; }
+}

@@ -1,0 +1,20 @@
+/* Importação de Fontes do Google */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght=300;400;600;700&display=swap');
+
+/* Altura adaptável do mapa para dispositivos móveis */
+#map {
+    height: 300px;
+    width: 100%;
+}
+
+/* Telas médias e grandes (Tablets e Desktops) */
+@media (min-width: 768px) {
+    #map {
+        height: 450px;
+    }
+}
+
+/* Folha de estilos base opcional */
+html {
+    scroll-behavior: smooth;
+}

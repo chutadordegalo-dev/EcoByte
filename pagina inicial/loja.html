@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoByte - Nossa Loja Sustentável</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght=300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="ico/ico.png">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'eco-dark': '#314E3F',
+                        'eco-light': '#A1B59C',
+                        'eco-blue': '#4B6A7F',
+                        'eco-bg': '#F9FAFB',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-eco-bg text-gray-800 font-sans">
+
+    <header class="fixed w-full top-0 z-50 bg-white shadow-sm transition-all duration-300">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <a href="inicio.html" class="flex items-center gap-3 group">
+                <img src="img/logoo.png" alt="Logo EcoByte" class="h-14 w-auto">
+                <span class="text-2xl font-bold text-eco-dark tracking-tight">EcoByte</span>
+            </a>
+            
+            <button id="btn-mobile-menu" class="md:hidden text-eco-dark p-2 text-2xl focus:outline-none">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+            
+            <nav class="hidden md:flex items-center gap-6 font-medium text-gray-600">
+                <a href="inicio.html" class="hover:text-eco-dark transition-colors">Home</a>
+                <a href="inicio.html#servicos" class="hover:text-eco-dark transition-colors">Serviços</a>
+                <a href="portfolio.html" class="hover:text-eco-dark transition-colors">Portfólio</a>
+                <a href="#" class="text-eco-dark font-bold border-b-2 border-eco-dark pb-1">Loja</a>
+                
+                <button id="btn-meus-pedidos" class="flex items-center gap-1.5 text-gray-600 hover:text-eco-dark transition-colors focus:outline-none">
+                    <i class="fa-solid fa-box-open text-lg text-orange-500"></i>
+                    <span>Meus Pedidos</span>
+                </button>
+
+                <button id="btn-abrir-carrinho" class="relative p-2 text-eco-dark hover:text-eco-blue transition-colors focus:outline-none">
+                    <i class="fa-solid fa-cart-shopping text-xl"></i>
+                    <span id="carrinho-contador" class="absolute -top-1 -right-1 bg-amber-600 text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center hidden">0</span>
+                </button>
+
+                <div id="area-autenticada" class="flex items-center gap-3 border-l border-gray-200 pl-4"></div>
+            </nav>
+        </div>
+
+        <nav id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100 px-4 py-4 space-y-4 shadow-lg flex flex-col font-medium text-gray-600">
+            <a href="inicio.html" class="hover:text-eco-dark transition-colors py-1">Home</a>
+            <a href="inicio.html#servicos" class="hover:text-eco-dark transition-colors py-1">Serviços</a>
+            <a href="portifolio.html" class="hover:text-eco-dark transition-colors py-1">Portfólio</a>
+            <a href="#" class="text-eco-dark font-bold py-1">Loja</a>
+            <hr class="border-gray-100">
+            
+            <button id="btn-meus-pedidos-mobile" class="flex items-center gap-2 text-gray-600 hover:text-eco-dark transition-colors w-full text-left py-1">
+                <i class="fa-solid fa-box-open text-lg text-orange-500"></i>
+                <span>Meus Pedidos</span>
+            </button>
+
+            <button id="btn-abrir-carrinho-mobile" class="flex items-center gap-2 text-eco-dark hover:text-eco-blue transition-colors w-full text-left py-1">
+                <i class="fa-solid fa-cart-shopping text-lg"></i>
+                <span>Carrinho</span>
+            </button>
+
+            <div id="area-autenticada-mobile" class="pt-2 border-t border-gray-100 flex flex-col gap-3"></div>
+        </nav>
+    </header>
+
+    <main class="pt-24 min-h-screen">
+        <section class="bg-eco-dark text-white py-12 text-center relative overflow-hidden">
+            <div class="absolute inset-0 opacity-10">
+                <img src="https://images.unsplash.com/photo-1531403009284-440f080d1e12?ixlib=rb-4.0.3" class="w-full h-full object-cover" alt="Background">
+            </div>
+            <div class="relative z-10 container mx-auto px-4">
+                <span class="bg-eco-light/20 text-eco-light px-4 py-1 rounded-full text-xs font-semibold uppercase tracking-wider">Hardware & Peças Recondicionadas</span>
+                <h1 class="text-3xl md:text-4xl font-bold mt-2 mb-3">Peças de Computadores Certificadas</h1>
+                <p class="text-gray-300 max-w-xl mx-auto text-sm md:text-base">Componentes revisados com garantia e foco na economia circular.</p>
+            </div>
+        </section>
+
+        <section class="container mx-auto px-4 py-12 max-w-6xl">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <article class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow flex flex-col justify-between">
+                    <div class="relative bg-gray-50 p-4 pt-6">
+                        <span class="absolute top-3 left-3 bg-emerald-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">Testado</span>
+                        <img src="https://images.unsplash.com/photo-1591488320449-011701bb6704?ixlib=rb-4.0.3" alt="NVIDIA GTX 1660 Super" class="w-full h-40 object-contain mx-auto">
+                    </div>
+                    <div class="p-4 flex-1 flex flex-col justify-between">
+                        <div>
+                            <p class="text-[11px] font-bold text-eco-blue uppercase tracking-wider">Placas de Vídeo</p>
+                            <h3 class="font-bold text-eco-dark text-base mt-1 line-clamp-1">NVIDIA GTX 1660 Super 6GB</h3>
+                        </div>
+                        <div class="mt-4">
+                            <span class="text-xl font-extrabold text-eco-dark">R$ 850,00</span>
+                            <button onclick="adicionarAoCarrinho('NVIDIA GTX 1660 Super 6GB', 850.00)" class="w-full bg-eco-dark text-white text-xs font-bold py-2.5 rounded-xl mt-4 hover:bg-eco-blue transition-colors flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-cart-plus"></i> Adicionar ao Carrinho
+                            </button>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow flex flex-col justify-between">
+                    <div class="relative bg-gray-50 p-4 pt-6">
+                        <img src="https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?ixlib=rb-4.0.3" alt="SSD Kingston" class="w-full h-40 object-contain mx-auto">
+                    </div>
+                    <div class="p-4 flex-1 flex flex-col justify-between">
+                        <div>
+                            <p class="text-[11px] font-bold text-eco-blue uppercase tracking-wider">Armazenamento</p>
+                            <h3 class="font-bold text-eco-dark text-base mt-1 line-clamp-1">SSD Kingston A400 480GB Sata III</h3>
+                        </div>
+                        <div class="mt-4">
+                            <span class="text-xl font-extrabold text-eco-dark">R$ 180,00</span>
+                            <button onclick="adicionarAoCarrinho('SSD Kingston A400 480GB Sata III', 180.00)" class="w-full bg-eco-dark text-white text-xs font-bold py-2.5 rounded-xl mt-4 hover:bg-eco-blue transition-colors flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-cart-plus"></i> Adicionar ao Carrinho
+                            </button>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow flex flex-col justify-between">
+                    <div class="relative bg-gray-50 p-4 pt-6">
+                        <span class="absolute top-3 left-3 bg-amber-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">Promoção</span>
+                        <img src="https://images.unsplash.com/photo-1563206767-5b18f218e8de?ixlib=rb-4.0.3" alt="Memória RAM HyperX" class="w-full h-40 object-contain mx-auto">
+                    </div>
+                    <div class="p-4 flex-1 flex flex-col justify-between">
+                        <div>
+                            <p class="text-[11px] font-bold text-eco-blue uppercase tracking-wider">Memória RAM</p>
+                            <h3 class="font-bold text-eco-dark text-base mt-1 line-clamp-1">Memória RAM HyperX Fury 8GB DDR4</h3>
+                        </div>
+                        <div class="mt-4">
+                            <span class="text-xl font-extrabold text-eco-dark">R$ 120,00</span>
+                            <button onclick="adicionarAoCarrinho('Memória RAM HyperX Fury 8GB DDR4', 120.00)" class="w-full bg-eco-dark text-white text-xs font-bold py-2.5 rounded-xl mt-4 hover:bg-eco-blue transition-colors flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-cart-plus"></i> Adicionar ao Carrinho
+                            </button>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow flex flex-col justify-between">
+                    <div class="relative bg-gray-50 p-4 pt-6">
+                        <img src="https://images.unsplash.com/photo-1587202372775-e229f172b9d7?ixlib=rb-4.0.3" alt="Processador Intel" class="w-full h-40 object-contain mx-auto">
+                    </div>
+                    <div class="p-4 flex-1 flex flex-col justify-between">
+                        <div>
+                            <p class="text-[11px] font-bold text-eco-blue uppercase tracking-wider">Processadores</p>
+                            <h3 class="font-bold text-eco-dark text-base mt-1 line-clamp-1">Intel Core i5-10400F 2.9GHz</h3>
+                        </div>
+                        <div class="mt-4">
+                            <span class="text-xl font-extrabold text-eco-dark">R$ 490,00</span>
+                            <button onclick="adicionarAoCarrinho('Intel Core i5-10400F 2.9GHz', 490.00)" class="w-full bg-eco-dark text-white text-xs font-bold py-2.5 rounded-xl mt-4 hover:bg-eco-blue transition-colors flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-cart-plus"></i> Adicionar ao Carrinho
+                            </button>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <div id="modal-auth" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[150] flex justify-center items-center hidden p-4" role="dialog" aria-modal="true">
+        <div class="bg-white w-full max-w-sm rounded-2xl shadow-2xl overflow-hidden p-6 relative">
+            <button id="btn-fechar-auth" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-lg focus:outline-none"><i class="fa-solid fa-xmark"></i></button>
+            <div class="flex border-b border-gray-200 mb-6 font-bold text-sm text-center">
+                <button id="btn-aba-login" class="flex-1 pb-3 border-b-2 border-orange-500 text-orange-600">Entrar</button>
+                <button id="btn-aba-cadastro" class="flex-1 pb-3 border-b-2 border-transparent text-gray-400">Cadastrar</button>
+            </div>
+            <form id="form-auth" class="space-y-4 text-xs">
+                <div id="campo-nome-cadastro" class="hidden">
+                    <label for="auth-nome" class="block text-gray-600 font-semibold mb-1">Nome Completo</label>
+                    <input type="text" id="auth-nome" placeholder="Digite seu nome" class="w-full p-2.5 border border-gray-300 rounded-lg outline-none focus:border-orange-500">
+                </div>
+                <div>
+                    <label for="auth-email" class="block text-gray-600 font-semibold mb-1">E-mail</label>
+                    <input type="email" id="auth-email" required placeholder="exemplo@email.com" class="w-full p-2.5 border border-gray-300 rounded-lg outline-none focus:border-orange-500">
+                </div>
+                <div>
+                    <label for="auth-senha" class="block text-gray-600 font-semibold mb-1">Senha</label>
+                    <input type="password" id="auth-senha" required placeholder="Digite sua senha" class="w-full p-2.5 border border-gray-300 rounded-lg outline-none focus:border-orange-500">
+                </div>
+                <button type="submit" id="btn-submit-auth" class="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 rounded-lg transition-colors text-sm shadow-md mt-2">Entrar na Conta</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="modal-carrinho" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-[100] flex justify-end hidden" role="dialog" aria-modal="true">
+        <div class="bg-white w-full max-w-md h-full shadow-2xl p-6 flex flex-col justify-between overflow-y-auto">
+            <div>
+                <div class="flex justify-between items-center pb-4 border-b border-gray-200">
+                    <h3 class="text-lg font-bold text-eco-dark"><i class="fa-solid fa-cart-shopping mr-2"></i>Seu Carrinho</h3>
+                    <button id="btn-fechar-carrinho" class="text-gray-400 hover:text-gray-600 text-xl focus:outline-none"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                
+                <div id="carrinho-itens" class="mt-4 space-y-3 max-h-[20vh] overflow-y-auto pr-2"></div>
+
+                <div class="border-t border-b border-gray-100 py-3 mt-3 text-xs space-y-2">
+                    <label class="block font-bold text-gray-700"><i class="fa-solid fa-truck mr-1 text-eco-blue"></i> Endereço de Entrega</label>
+                    <div class="flex gap-2">
+                        <input type="text" id="input-cep" placeholder="CEP (Ex: 01001-000)" class="w-1/2 p-2.5 border border-gray-300 rounded-lg outline-none focus:border-eco-dark">
+                        <input type="text" id="input-numero-casa" placeholder="Nº da Casa" class="w-1/2 p-2.5 border border-gray-300 rounded-lg outline-none focus:border-eco-dark">
+                    </div>
+                    <button id="btn-calcular-frete" class="w-full bg-eco-dark text-white font-bold py-2 rounded-lg hover:bg-eco-blue transition text-[11px]">Calcular Frete</button>
+                    <div id="resultado-frete" class="text-gray-600 font-medium hidden p-2 bg-gray-50 rounded-lg border border-gray-100"></div>
+                </div>
+
+                <div class="py-2 text-xs">
+                    <label class="block font-bold text-gray-700 mb-2"><i class="fa-solid fa-credit-card mr-1 text-orange-500"></i> Forma de Pagamento</label>
+                    <div class="grid grid-cols-3 gap-2" id="grupo-opcoes-pagamento">
+                        <label class="border border-gray-200 rounded-xl p-2.5 flex flex-col items-center justify-center gap-1 cursor-pointer hover:bg-orange-50/50 has-[:checked]:border-orange-500 has-[:checked]:bg-orange-50">
+                            <input type="radio" name="forma-pagamento" value="Pix" checked class="hidden">
+                            <i class="fa-solid fa-pix text-lg text-emerald-600"></i>
+                            <span class="font-bold text-[10px]">Pix</span>
+                        </label>
+                        <label class="border border-gray-200 rounded-xl p-2.5 flex flex-col items-center justify-center gap-1 cursor-pointer hover:bg-orange-50/50 has-[:checked]:border-orange-500 has-[:checked]:bg-orange-50">
+                            <input type="radio" name="forma-pagamento" value="Cartão de Crédito" class="hidden">
+                            <i class="fa-solid fa-credit-card text-lg text-blue-600"></i>
+                            <span class="font-bold text-[10px]">Cartão</span>
+                        </label>
+                        <label class="border border-gray-200 rounded-xl p-2.5 flex flex-col items-center justify-center gap-1 cursor-pointer hover:bg-orange-50/50 has-[:checked]:border-orange-500 has-[:checked]:bg-orange-50">
+                            <input type="radio" name="forma-pagamento" value="Boleto Bancário" class="hidden">
+                            <i class="fa-solid fa-barcode text-lg text-gray-700"></i>
+                            <span class="font-bold text-[10px]">Boleto</span>
+                        </label>
+                    </div>
+                </div>
+
+                <section id="secao-formulario-cartao" class="hidden bg-gray-50 p-3 rounded-xl border border-gray-200 text-xs space-y-2 mt-2">
+                    <p class="font-bold text-gray-700 mb-1"><i class="fa-solid fa-lock text-emerald-600 mr-1"></i> Dados do Cartão</p>
+                    <input type="text" id="cartao-numero" placeholder="0000 0000 0000 0000" maxlength="19" class="w-full p-2 border border-gray-300 rounded-lg outline-none focus:border-blue-500">
+                    <input type="text" id="cartao-nome" placeholder="Nome impresso no cartão" class="w-full p-2 border border-gray-300 rounded-lg outline-none focus:border-blue-500 uppercase">
+                    <div class="flex gap-2">
+                        <input type="text" id="cartao-validade" placeholder="MM/AA" maxlength="5" class="w-1/2 p-2 border border-gray-300 rounded-lg outline-none focus:border-blue-500">
+                        <input type="text" id="cartao-cvv" placeholder="CVV" maxlength="4" class="w-1/2 p-2 border border-gray-300 rounded-lg outline-none focus:border-blue-500">
+                    </div>
+                </section>
+            </div>
+
+            <div class="border-t border-gray-200 pt-3 bg-white">
+                <div class="space-y-1 text-xs text-gray-600 mb-2">
+                    <div class="flex justify-between"><span>Subtotal:</span><span id="resumo-subtotal">R$ 0,00</span></div>
+                    <div class="flex justify-between"><span>Frete:</span><span id="resumo-frete">R$ 0,00</span></div>
+                </div>
+                <div class="flex justify-between font-bold text-base text-eco-dark mb-3">
+                    <span>Total Geral:</span>
+                    <span id="carrinho-total">R$ 0,00</span>
+                </div>
+                <button id="btn-finalizar-compra" class="w-full bg-emerald-600 text-white font-bold py-3 rounded-xl hover:bg-emerald-700 transition-colors flex items-center justify-center gap-2 text-sm shadow-md">
+                    <i class="fa-solid fa-bag-shopping"></i> Finalizar Pedido
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-checkout-resultado" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-[200] flex justify-center items-center hidden p-4" role="dialog" aria-modal="true">
+        <div class="bg-white w-full max-w-md rounded-2xl shadow-2xl p-6 text-center space-y-4 max-h-[90vh] overflow-y-auto" id="conteudo-checkout-resultado">
+            </div>
+    </div>
+
+    <div id="modal-pedidos" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-[110] flex justify-center items-center hidden p-4" role="dialog" aria-modal="true">
+        <div class="bg-white w-full max-w-xl rounded-2xl shadow-2xl h-[75vh] flex flex-col overflow-hidden">
+            <div class="p-4 border-b border-gray-200 flex justify-between items-center bg-white">
+                <h3 class="text-base font-bold text-eco-dark flex items-center gap-2">
+                    <i class="fa-solid fa-clipboard-list text-xl text-orange-500"></i> Meus Pedidos
+                </h3>
+                <button id="btn-fechar-pedidos" class="text-gray-400 hover:text-gray-600 text-xl focus:outline-none"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            
+            <div class="flex bg-gray-50 border-b border-gray-200 text-xs font-bold text-center">
+                <button id="aba-todos" onclick="filtrarPedidosShopee('todos')" class="flex-1 py-3 text-orange-600 border-b-2 border-orange-500">Tudo</button>
+                <button id="aba-pendentes" onclick="filtrarPedidosShopee('Pix')" class="flex-1 py-3 text-gray-500 border-b-2 border-transparent hover:text-orange-600">Aguardando Pix</button>
+                <button id="aba-concluidos" onclick="filtrarPedidosShopee('Concluidos')" class="flex-1 py-3 text-gray-500 border-b-2 border-transparent hover:text-orange-600">Aprovados</button>
+            </div>
+
+            <div id="lista-pedidos-container" class="p-4 overflow-y-auto space-y-3 flex-1 bg-gray-50"></div>
+        </div>
+    </div>
+
+    <footer class="bg-eco-dark text-white/80 py-6 text-center mt-12">
+        <p class="font-semibold text-white mb-1">EcoByte © 2026</p>
+    </footer>
+
+    <script src="loja.js"></script>
+</body>
+</html>

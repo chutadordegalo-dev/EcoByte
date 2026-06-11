@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoByte - Nosso Portfólio</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght=300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="ico/ico.png">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'eco-dark': '#314E3F',
+                        'eco-light': '#A1B59C',
+                        'eco-blue': '#4B6A7F',
+                        'eco-bg': '#F9FAFB',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-eco-bg text-gray-800 font-sans">
+
+    <header class="fixed w-full top-0 z-50 bg-white shadow-sm transition-all duration-300">
+    <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+        <a href="inicio.html" class="flex items-center gap-3">
+            <img src="img/logoo.png" alt="Logo EcoByte" class="h-14 w-auto">
+            <span class="text-2xl font-bold text-eco-dark tracking-tight">EcoByte</span>
+        </a>
+        
+        <button id="menu-btn-portfolio" class="md:hidden text-eco-dark p-2 text-2xl focus:outline-none">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+        
+        <nav class="hidden md:flex items-center gap-6 font-medium text-gray-600">
+            <a href="inicio.html" class="hover:text-eco-dark transition-colors">Home</a>
+            <a href="loja.html" class="hover:text-eco-dark transition-colors">Loja</a>
+            <a href="perfil.html" class="hover:text-eco-dark transition-colors">Perfil</a>
+        </nav>
+    </div>
+
+    <nav id="mobile-menu-portfolio" class="hidden md:hidden bg-white border-t border-gray-100 px-4 py-4 space-y-4 shadow-lg flex flex-col font-medium text-gray-600">
+        <a href="inicio.html" class="portfolio-link hover:text-eco-dark transition-colors py-1">Home</a>
+        <a href="loja.html" class="portfolio-link hover:text-eco-dark transition-colors py-1">Loja</a>
+        <a href="perfil.html" class="portfolio-link hover:text-eco-dark transition-colors py-1">Perfil</a>
+    </nav>
+</header>
+
+    <main class="pt-24 min-h-screen">
+        <section class="bg-eco-dark text-white py-16 text-center relative overflow-hidden">
+            <div class="absolute inset-0 opacity-10">
+                <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3" class="w-full h-full object-cover">
+            </div>
+            <div class="relative z-10 container mx-auto px-4">
+                <span class="bg-eco-light/20 text-eco-light px-4 py-1 rounded-full text-xs font-semibold uppercase tracking-wider">Histórico de Impacto</span>
+                <h1 class="text-4xl md:text-5xl font-bold mt-3 mb-4">Projetos & Parcerias de Sucesso</h1>
+                <p class="text-gray-300 max-w-2xl mx-auto text-base md:text-lg">
+                    Conheça as soluções personalizadas de descarte ecológico que desenvolvemos para indústrias, empresas e instituições governamentais.
+                </p>
+            </div>
+        </section>
+
+        <section class="container mx-auto px-4 py-12 max-w-6xl">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                
+                <article class="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden hover:shadow-xl transition-shadow flex flex-col">
+                    <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?ixlib=rb-4.0.3" alt="Renovação de Data Center" class="w-full h-48 object-cover">
+                    <div class="p-6 flex-1 flex flex-col justify-between">
+                        <div>
+                            <span class="text-xs font-bold text-eco-blue bg-eco-blue/10 px-3 py-1 rounded-full">Corporativo</span>
+                            <h3 class="text-xl font-bold text-eco-dark mt-3 mb-2">Descarte Seguro TechCorp</h3>
+                            <p class="text-gray-600 text-sm leading-relaxed mb-4">
+                                Substituição e reciclagem certificada de 1.200 servidores antigos, garantindo a destruição magnética de dados sigilosos da empresa.
+                            </p>
+                        </div>
+                        <div class="border-t border-gray-100 pt-4 flex items-center justify-between text-xs font-semibold text-gray-500">
+                            <span><i class="fa-solid fa-weight-hanging mr-1 text-eco-light"></i> 4.5 Toneladas</span>
+                            <span><i class="fa-solid fa-calendar-days mr-1 text-eco-light"></i> Out/2025</span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden hover:shadow-xl transition-shadow flex flex-col">
+                    <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?ixlib=rb-4.0.3" alt="Eletrônicos em Escolas" class="w-full h-48 object-cover">
+                    <div class="p-6 flex-1 flex flex-col justify-between">
+                        <div>
+                            <span class="text-xs font-bold text-eco-dark bg-eco-light/30 px-3 py-1 rounded-full">Setor Público</span>
+                            <h3 class="text-xl font-bold text-eco-dark mt-3 mb-2">Escola Verde Digital</h3>
+                            <p class="text-gray-600 text-sm leading-relaxed mb-4">
+                                Gincana sustentável em parceria com a Prefeitura de Contagem, arrecadando toneladas de lixo eletrônico doméstico com foco na educação ambiental.
+                            </p>
+                        </div>
+                        <div class="border-t border-gray-100 pt-4 flex items-center justify-between text-xs font-semibold text-gray-500">
+                            <span><i class="fa-solid fa-weight-hanging mr-1 text-eco-light"></i> 2.8 Toneladas</span>
+                            <span><i class="fa-solid fa-calendar-days mr-1 text-eco-light"></i> Fev/2026</span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden hover:shadow-xl transition-shadow flex flex-col">
+                    <img src="https://images.unsplash.com/photo-1531403009284-440f080d1e12?ixlib=rb-4.0.3" alt="Logística Reversa" class="w-full h-48 object-cover">
+                    <div class="p-6 flex-1 flex flex-col justify-between">
+                        <div>
+                            <span class="text-xs font-bold text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full">Logística</span>
+                            <h3 class="text-xl font-bold text-eco-dark mt-3 mb-2">Logística Reversa Industrial</h3>
+                            <p class="text-gray-600 text-sm leading-relaxed mb-4">
+                                Implementação de pontos de coleta exclusivos para resíduos da linha de produção de grandes indústrias automotivas da região.
+                            </p>
+                        </div>
+                        <div class="border-t border-gray-100 pt-4 flex items-center justify-between text-xs font-semibold text-gray-500">
+                            <span><i class="fa-solid fa-weight-hanging mr-1 text-eco-light"></i> 12.3 Toneladas</span>
+                            <span><i class="fa-solid fa-calendar-days mr-1 text-eco-light"></i> Mai/2026</span>
+                        </div>
+                    </div>
+                </article>
+
+            </div>
+        </section>
+
+        <section class="bg-eco-blue/5 border-t border-b border-gray-100 py-16 my-8">
+            <div class="container mx-auto px-4 max-w-5xl text-center">
+                <h2 class="text-2xl md:text-3xl font-bold text-eco-dark mb-10">Nosso Impacto Ambiental Acumulado</h2>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                    <div>
+                        <p class="text-4xl font-extrabold text-eco-dark">84 t</p>
+                        <p class="text-xs text-gray-500 font-medium mt-1">Metais Pesados Isolados</p>
+                    </div>
+                    <div>
+                        <p class="text-4xl font-extrabold text-eco-dark">15.000+</p>
+                        <p class="text-xs text-gray-500 font-medium mt-1">Monitores Reciclados</p>
+                    </div>
+                    <div>
+                        <p class="text-4xl font-extrabold text-eco-dark">320</p>
+                        <p class="text-xs text-gray-500 font-medium mt-1">Empresas Certificadas</p>
+                    </div>
+                    <div>
+                        <p class="text-4xl font-extrabold text-eco-dark">100%</p>
+                        <p class="text-xs text-gray-500 font-medium mt-1">Rastreabilidade Digital</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="container mx-auto px-4 py-16 text-center max-w-xl">
+            <div class="bg-white p-8 rounded-2xl shadow-xl border border-gray-100">
+                <i class="fa-solid fa-seedling text-4xl text-eco-light mb-4"></i>
+                <h3 class="text-2xl font-bold text-eco-dark mb-2">Sua empresa quer fazer parte desta lista?</h3>
+                <p class="text-gray-600 text-sm mb-6">Agende uma coleta corporativa dedicada e receba o selo e certificado de Destinação Verde.</p>
+                <a href="index.html#contato" class="inline-block bg-eco-dark text-white px-8 py-3 rounded-xl font-bold hover:bg-eco-blue transition-colors shadow-md">
+                    Iniciar Parceria
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-eco-dark text-white/80 py-8 border-t border-white/10 text-center">
+        <div class="container mx-auto px-4">
+            <p class="font-semibold text-white mb-1">EcoByte © 2026</p>
+            <p class="text-xs">Trabalho Técnico de Conclusão - Curso Técnico SENAC</p>
+        </div>
+    </footer>
+<script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const menuBtn = document.getElementById('menu-btn-portfolio');
+            const mobileMenu = document.getElementById('mobile-menu-portfolio');
+            const portfolioLinks = document.querySelectorAll('.portfolio-link');
+
+            if (menuBtn && mobileMenu) {
+                menuBtn.addEventListener('click', () => {
+                    mobileMenu.classList.toggle('hidden');
+                    const icone = menuBtn.querySelector('i');
+                    
+                    if (mobileMenu.classList.contains('hidden')) {
+                        icone.className = "fa-solid fa-bars";
+                    } else {
+                        icone.className = "fa-solid fa-xmark";
+                    }
+                });
+                
+                // Fecha o menu móvel automaticamente ao clicar em qualquer link
+                portfolioLinks.forEach(link => {
+                    link.addEventListener('click', () => {
+                        mobileMenu.classList.add('hidden');
+                        menuBtn.querySelector('i').className = "fa-solid fa-bars";
+                    });
+                });
+            }
+        });
+    </script>
+</body>
+</html>

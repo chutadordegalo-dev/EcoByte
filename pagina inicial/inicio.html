@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoByte - Reciclagem de Eletrônicos</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link class="w-5 h-5 rounded-full" rel="icon" type="image/png" href="ico/ico.png">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="inicio.css">
+</head>
+<body class="bg-eco-bg text-gray-800">
+
+    <header class="fixed w-full top-0 z-50 bg-white shadow-sm transition-all duration-300" id="navbar">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <a href="#" class="flex items-center gap-3 group">
+                <img src="img/logoo.png" alt="Logo EcoByte" class="h-14 w-auto">
+                <span class="text-2xl font-bold text-eco-dark tracking-tight">EcoByte</span>
+            </a>
+            
+            <button id="menu-btn" class="md:hidden text-eco-dark p-2 text-2xl focus:outline-none">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+            
+            <nav class="hidden md:flex items-center gap-6 font-medium text-gray-600">
+                <a href="#" class="text-eco-dark font-bold border-b-2 border-eco-dark pb-1">Home</a>
+                <a href="#servicos" class="hover:text-eco-dark transition-colors">Serviços</a>
+                <a href="#reciclamos" class="hover:text-eco-dark transition-colors">O que Reciclamos</a>
+                <a href="portfolio.html" class="hover:text-eco-dark transition-colors">Portfólio</a>
+                <a href="loja.html" class="hover:text-eco-dark transition-colors flex items-center gap-1">
+                    <i class="fa-solid fa-shop text-amber-600 text-sm"></i> Loja
+                </a>
+                
+                <div id="area-auth-index" class="flex items-center gap-3 border-l border-gray-200 pl-4"></div>
+            </nav>
+        </div>
+
+        <nav id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100 px-4 py-4 space-y-4 shadow-lg flex flex-col font-medium text-gray-600">
+            <a href="#" class="mobile-link text-eco-dark font-bold py-1">Home</a>
+            <a href="#servicos" class="mobile-link hover:text-eco-dark transition-colors py-1">Serviços</a>
+            <a href="#reciclamos" class="mobile-link hover:text-eco-dark transition-colors py-1">O que Reciclamos</a>
+            <a href="portifolio.html" class="mobile-link hover:text-eco-dark transition-colors py-1">Portfólio</a>
+            <a href="loja.html" class="mobile-link hover:text-eco-dark transition-colors py-1 flex items-center gap-2">
+                <i class="fa-solid fa-shop text-amber-600"></i> Loja
+            </a>
+            <hr class="border-gray-100">
+            <div id="area-auth-index-mobile" class="pt-2 border-t border-gray-100 flex flex-col gap-3"></div>
+        </nav>
+    </header>
+
+    <section id="home" class="relative h-screen flex items-center justify-center bg-eco-dark text-white overflow-hidden">
+        <div class="absolute inset-0 opacity-30">
+            <img src="https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" alt="Recycling Background" class="w-full h-full object-cover">
+        </div>
+        <div class="relative z-10 container mx-auto px-4 text-center">
+            <span class="inline-block bg-eco-light/20 text-eco-light px-4 py-1 rounded-full text-sm font-semibold mb-4 border border-eco-light/30">
+                Tecnologia & Sustentabilidade
+            </span>
+            <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
+                Descarte consciente de <br> <span class="text-eco-light">Lixo Eletrônico</span>
+            </h1>
+            <p class="text-lg md:text-xl text-gray-200 max-w-2xl mx-auto mb-10">
+                Transforme equipamentos antigos em recursos para o futuro. A EcoByte garante reciclagem certificada e destruição segura de dados.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="#cotacaoForm" class="bg-eco-light text-eco-dark px-8 py-4 rounded-full font-bold text-lg hover:bg-white hover:scale-105 transition-all shadow-lg">
+                    Solicitar Cotação
+                </a>
+                <a href="#pontos" class="border border-white text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-white hover:text-eco-dark transition-all">
+                    Encontrar Pontos
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section id="servicos" class="py-20 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center max-w-2xl mx-auto mb-16 space-y-4">
+                <h2 class="text-3xl md:text-4xl font-bold text-eco-dark">O que fazemos por você?</h2>
+                <p class="text-gray-600">Oferecemos soluções completas para a gestão de resíduos tecnológicos de forma simples e ecológica.</p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-eco-bg p-8 rounded-3xl border border-gray-100 hover:shadow-xl transition-all group hover:-translate-y-1 duration-300">
+                    <div class="w-14 h-14 bg-eco-dark/10 text-eco-dark rounded-2xl flex items-center justify-center text-2xl mb-6 group-hover:bg-eco-dark group-hover:text-white transition-colors">
+                        <i class="fa-solid fa-truck-ramp-box"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-eco-dark mb-3">Coleta Agendada</h3>
+                    <p class="text-gray-600 text-sm leading-relaxed">Agende a retirada de grandes volumes de eletrônicos diretamente na sua empresa ou residência.</p>
+                </div>
+
+                <div class="bg-eco-bg p-8 rounded-3xl border border-gray-100 hover:shadow-xl transition-all group hover:-translate-y-1 duration-300">
+                    <div class="w-14 h-14 bg-eco-dark/10 text-eco-dark rounded-2xl flex items-center justify-center text-2xl mb-6 group-hover:bg-eco-dark group-hover:text-white transition-colors">
+                        <i class="fa-solid fa-recycle"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-eco-dark mb-3">Triagem e Descarte</h3>
+                    <p class="text-gray-600 text-sm leading-relaxed">Separamos todos os componentes metálicos, plásticos e químicos, encaminhando para o reprocessamento correto.</p>
+                </div>
+
+                <div class="bg-eco-bg p-8 rounded-3xl border border-gray-100 hover:shadow-xl transition-all group hover:-translate-y-1 duration-300">
+                    <div class="w-14 h-14 bg-eco-dark/10 text-eco-dark rounded-2xl flex items-center justify-center text-2xl mb-6 group-hover:bg-eco-dark group-hover:text-white transition-colors">
+                        <i class="fa-solid fa-certificate"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-eco-dark mb-3">Certificação Verde</h3>
+                    <p class="text-gray-600 text-sm leading-relaxed">Emitimos certificados de destinação ecologicamente correta para empresas que cumprem as normas ambientais.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="reciclamos" class="py-20 bg-eco-bg">
+        <div class="container mx-auto px-4">
+            <div class="text-center max-w-2xl mx-auto mb-16 space-y-4">
+                <h2 class="text-3xl md:text-4xl font-bold text-eco-dark">Tipos de Materiais Aceitos</h2>
+                <p class="text-gray-600">Praticamente qualquer dispositivo que utilize energia ou baterias pode ser reciclado conosco.</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="bg-white p-6 rounded-2xl border border-gray-100 text-center space-y-3 shadow-sm">
+                    <i class="fa-solid fa-laptop text-4xl text-eco-blue"></i>
+                    <h4 class="font-bold text-eco-dark">Computadores</h4>
+                    <p class="text-xs text-gray-500">Notebooks, CPUs, Monitores e Teclados</p>
+                </div>
+                <div class="bg-white p-6 rounded-2xl border border-gray-100 text-center space-y-3 shadow-sm">
+                    <i class="fa-solid fa-mobile-screen-button text-4xl text-eco-blue"></i>
+                    <h4 class="font-bold text-eco-dark">Celulares</h4>
+                    <p class="text-xs text-gray-500">Smartphones, Tablets e Carregadores</p>
+                </div>
+                <div class="bg-white p-6 rounded-2xl border border-gray-100 text-center space-y-3 shadow-sm">
+                    <i class="fa-solid fa-print text-4xl text-eco-blue"></i>
+                    <h4 class="font-bold text-eco-dark">Impressoras</h4>
+                    <p class="text-xs text-gray-500">Scanners, Toners vazios e Cabos</p>
+                </div>
+                <div class="bg-white p-6 rounded-2xl border border-gray-100 text-center space-y-3 shadow-sm">
+                    <i class="fa-solid fa-tv text-4xl text-eco-blue"></i>
+                    <h4 class="font-bold text-eco-dark">Eletrodomésticos</h4>
+                    <p class="text-xs text-gray-500">Micro-ondas, TVs e Aparelhos de Som</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="pontos" class="py-20 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center max-w-2xl mx-auto mb-12 space-y-4">
+                <h2 class="text-3xl md:text-4xl font-bold text-eco-dark">Nossos Pontos de Entrega</h2>
+                <p class="text-gray-600">Encontre o ecoponto ou parceiro da EcoByte mais próximo de você na região de Contagem/MG.</p>
+            </div>
+            
+            <div class="max-w-md mx-auto mb-8 relative">
+                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </div>
+                <input type="text" id="busca-ponto" placeholder="Digite o nome do bairro ou ponto de coleta..." 
+                    class="w-full pl-11 pr-4 py-3.5 border border-gray-200 rounded-2xl outline-none focus:border-eco-dark bg-gray-50 text-sm shadow-sm transition-all">
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-6 bg-gray-50 p-4 rounded-3xl border border-gray-200 shadow-sm">
+                <div class="md:col-span-1 bg-white rounded-2xl p-4 overflow-y-auto max-h-[250px] md:max-h-[450px] space-y-3" id="lista-pontos-lateral">
+                </div>
+                
+                <div class="md:col-span-2 rounded-2xl overflow-hidden shadow-inner border border-gray-100" id="map"></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-20 bg-gradient-to-br from-eco-dark to-[#1d3327] text-white">
+        <div class="container mx-auto px-4 max-w-5xl">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div class="space-y-6">
+                    <h2 class="text-4xl font-bold leading-tight">Possui grande volume de descarte em sua empresa?</h2>
+                    <p class="text-white/80 text-sm leading-relaxed">
+                        Oferecemos logística corporativa personalizada com emissão imediata de laudo técnico de descaracterização e inventário. Solucione o passivo ambiental de sua marca agora.
+                    </p>
+                    <div class="flex items-center gap-3 text-eco-light font-semibold">
+                        <i class="fa-solid fa-headset text-xl"></i>
+                        <span>Suporte dedicado para Empresas</span>
+                    </div>
+                </div>
+
+                <div class="bg-white p-8 rounded-3xl text-gray-800 shadow-2xl w-full">
+                    <h3 class="text-2xl font-bold text-eco-dark mb-6 border-b pb-2 border-gray-100">Solicitar Coleta Corporativa</h3>
+                    <form id="cotacaoForm" class="space-y-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-bold text-gray-600 mb-1">Nome da Empresa / Responsável</label>
+                                <input type="text" id="cotacao-nome" required class="w-full p-3 border border-gray-200 rounded-xl outline-none focus:border-eco-dark bg-gray-50 text-sm">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-gray-600 mb-1">E-mail Comercial</label>
+                                <input type="email" id="cotacao-email" required class="w-full p-3 border border-gray-200 rounded-xl outline-none focus:border-eco-dark bg-gray-50 text-sm">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-bold text-gray-600 mb-1">Número de Contato / WhatsApp</label>
+                                <input type="tel" id="cotacao-contato" placeholder="(31) 99999-9999" required class="w-full p-3 border border-gray-200 rounded-xl outline-none focus:border-eco-dark bg-gray-50 text-sm">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-gray-600 mb-1">Endereço Completo de Coleta</label>
+                                <input type="text" id="cotacao-endereco" placeholder="Rua, Número, Bairro - Contagem/MG" required class="w-full p-3 border border-gray-200 rounded-xl outline-none focus:border-eco-dark bg-gray-50 text-sm">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-gray-600 mb-1">Descreva os materiais e peso estimado</label>
+                            <textarea id="cotacao-descricao" rows="4" required class="w-full p-3 border border-gray-200 rounded-xl outline-none focus:border-eco-dark bg-gray-50 text-sm resize-none" placeholder="Ex: 15 monitores CRT, 5 CPUs antigas..."></textarea>
+                        </div>
+                        <button type="submit" class="w-full bg-eco-dark text-white py-3.5 rounded-xl font-bold hover:bg-eco-blue transition-colors text-sm shadow-lg tracking-wide uppercase mt-2">Enviar Solicitação</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div id="modal-auth" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-[100] flex items-center justify-center hidden opacity-0 transition-opacity duration-300">
+        <div class="bg-white w-full max-w-sm rounded-3xl p-6 shadow-2xl relative mx-4 transform scale-95 transition-transform duration-300 max-h-[90vh] overflow-y-auto" id="card-auth">
+            <button onclick="fecharLogin()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-xl focus:outline-none">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <div class="text-center mb-6">
+                <h3 id="auth-titulo" class="text-xl font-bold text-eco-dark">Acesse sua Conta</h3>
+                <p id="auth-subtitulo" class="text-xs text-gray-500 mt-1">Monitore seus pontos e coletas</p>
+            </div>
+
+            <form id="authForm" class="space-y-4">
+                <div id="campo-nome-index" class="hidden">
+                    <label for="auth-nome" class="block text-xs font-semibold text-gray-700 mb-1">Nome Completo</label>
+                    <input type="text" id="auth-nome" class="w-full p-2.5 border border-gray-200 rounded-xl outline-none focus:border-eco-dark bg-gray-50 text-sm">
+                </div>
+                <div>
+                    <label for="auth-email" class="block text-xs font-semibold text-gray-700 mb-1">E-mail</label>
+                    <input type="email" id="auth-email" required class="w-full p-2.5 border border-gray-200 rounded-xl outline-none focus:border-eco-dark bg-gray-50 text-sm">
+                </div>
+                <div>
+                    <label for="auth-senha" class="block text-xs font-semibold text-gray-700 mb-1">Senha</label>
+                    <input type="password" id="auth-senha" required class="w-full p-2.5 border border-gray-200 rounded-xl outline-none focus:border-eco-dark bg-gray-50 text-sm">
+                </div>
+                <button type="submit" id="btn-submit" class="w-full bg-eco-dark text-white py-2.5 rounded-xl font-bold hover:bg-eco-blue transition-colors text-sm shadow-md">
+                    Entrar
+                </button>
+            </form>
+
+            <div class="text-center mt-4 text-xs">
+                <p id="alternar-texto" class="text-gray-600">
+                    Não tem uma conta? 
+                    <button id="btn-alternar" type="button" onclick="alternarModoIndex()" class="text-eco-dark font-bold hover:underline focus:outline-none">Cadastre-se</button>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-eco-dark text-white/80 py-12 border-t border-white/10">
+        <div class="container mx-auto px-4 text-center">
+            <p class="font-semibold text-white mb-2">EcoByte © 2026</p>
+            <p class="text-sm">Trabalhando por um futuro eletrônico muito mais verde e limpo.</p>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="inicio.js"></script>
+</body>
+</html>
