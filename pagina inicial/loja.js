@@ -3,6 +3,9 @@ let pedidosHistorico = JSON.parse(localStorage.getItem('ecobyte_pedidos')) || []
 let usuariosRegistrados = JSON.parse(localStorage.getItem('ecobyte_usuarios')) || [];
 let usuarioLogado = JSON.parse(localStorage.getItem('ecobyte_sessao')) || null;
 
+// Começa com o objeto vazio para ser preenchido pelos dados reais do banco MySQL
+let estoqueProdutos = {};
+
 let valorFrete = 0;
 let modoAuthAtual = "login";
 let filtroAbaAtual = "todos";
@@ -12,6 +15,9 @@ document.addEventListener('DOMContentLoaded', () => {
     atualizarInterfaceUsuario();
     salvarCarrinho();
     configurarMudancaPagamento();
+    
+    // ADICIONADO: Busca os estoques e produtos direto do MySQL assim que a página carrega
+    carregarEstoqueDoBanco();
 });
 
 function inicializarElementosDOM() {
@@ -29,7 +35,61 @@ function inicializarElementosDOM() {
     document.getElementById('btn-finalizar-compra').addEventListener('click', finalizarCompra);
 }
 
-// MONITOR DE EXIBIÇÃO DE OPÇÃO DE CARTÃO
+// ADICIONADO: Nova função para buscar dinamicamente os valores de estoque do banco de dados
+function carregarEstoqueDoBanco() {
+    fetch('http://localhost:3000/api/produtos')
+        .then(res => res.json())
+        .then(produtos => {
+            // Mapeia o array de linhas do banco para o formato de objeto esperado pelo restante do script
+            produtos.forEach(p => {
+                estoqueProdutos[p.nome] = p.quantidade;
+            });
+            
+            // Atualiza o localStorage de backup e redesenha na tela do cliente
+            localStorage.setItem('ecobyte_estoque', JSON.stringify(estoqueProdutos));
+            atualizarExibicaoEstoque();
+        })
+        .catch(err => {
+            console.error("Erro ao sincronizar estoque com o banco de dados:", err);
+            
+            // Fallback de segurança: Caso o servidor caia, usa o último guardado ou valores padrão
+            estoqueProdutos = JSON.parse(localStorage.getItem('ecobyte_estoque')) || {
+                "NVIDIA GTX 1660 Super 6GB": 5,
+                "SSD Kingston A400 480GB Sata III": 12,
+                "Memória RAM HyperX Fury 8GB DDR4": 8,
+                "Intel Core i5-10400F 2.9GHz": 4
+            };
+            atualizarExibicaoEstoque();
+        });
+}
+
+// Renderiza as quantidades atuais de estoque nos elementos HTML correspondentes
+function atualizarExibicaoEstoque() {
+    const mapaId = {
+        "NVIDIA GTX 1660 Super 6GB": "estoque-prod-1",
+        "SSD Kingston A400 480GB Sata III": "estoque-prod-2",
+        "Memória RAM HyperX Fury 8GB DDR4": "estoque-prod-3",
+        "Intel Core i5-10400F 2.9GHz": "estoque-prod-4"
+    };
+
+    Object.keys(mapaId).forEach(nomeProduto => {
+        const elementoId = mapaId[nomeProduto];
+        const elemento = document.getElementById(elementoId);
+        if (elemento) {
+            const qtdEstoque = estoqueProdutos[nomeProduto] !== undefined ? estoqueProdutos[nomeProduto] : 0;
+            if (qtdEstoque <= 0) {
+                elemento.innerText = "Esgotado";
+                elemento.className = "font-semibold text-red-500";
+            } else {
+                elemento.innerText = `${qtdEstoque} un.`;
+                elemento.className = "font-semibold text-emerald-600";
+            }
+        }
+    });
+    localStorage.setItem('ecobyte_estoque', JSON.stringify(estoqueProdutos));
+}
+
+// MONITOR DE EXIBIÇÃO DE OPÇÃO DE CARTÃO (CORRIGIDO: radios.forEach)
 function configurarMudancaPagamento() {
     const radios = document.querySelectorAll('input[name="forma-pagamento"]');
     const secaoCartao = document.getElementById('secao-formulario-cartao');
@@ -140,6 +200,15 @@ function atualizarBadge() {
 
 window.adicionarAoCarrinho = function(nome, preco) {
     const item = carrinho.find(i => i.nome === nome);
+    const qtdAtualNoCarrinho = item ? item.qtd : 0;
+    const estoqueDisponivel = estoqueProdutos[nome] || 0;
+
+    // Bloqueia a adição ao carrinho caso ultrapasse a quantidade em estoque
+    if (qtdAtualNoCarrinho + 1 > estoqueDisponivel) {
+        alert("⚠️ Limite de estoque atingido para este item!");
+        return;
+    }
+
     if(item) item.qtd += 1; else carrinho.push({ nome, preco, qtd: 1 });
     salvarCarrinho(); abrirCarrinho();
 };
@@ -147,7 +216,15 @@ window.adicionarAoCarrinho = function(nome, preco) {
 window.removerItem = function(nome) { carrinho = carrinho.filter(i => i.nome !== nome); salvarCarrinho(); };
 window.alterarQuantidade = function(nome, v) { 
     const item = carrinho.find(i => i.nome === nome);
-    if(item) { item.qtd += v; if(item.qtd <= 0) { removerItem(nome); return; } }
+    if(item) { 
+        // Valida limite de estoque ao incrementar quantidade de itens direto do carrinho
+        if (v > 0 && item.qtd + v > (estoqueProdutos[nome] || 0)) {
+            alert("⚠️ Desculpe, não temos mais unidades disponíveis em estoque.");
+            return;
+        }
+        item.qtd += v; 
+        if(item.qtd <= 0) { removerItem(nome); return; } 
+    }
     salvarCarrinho();
 };
 
@@ -205,7 +282,7 @@ function renderizarCarrinho() {
     totalElemento.innerText = `R$ ${(valorSubtotal + valorFrete).toFixed(2).replace('.', ',')}`;
 }
 
-// CHECKOUT INTEGRADO COM AS TRÊS OPÇÕES REALISTAS
+// CHECKOUT INTEGRADO COM ENVIOS PARA O BANCO DE DADOS MYSQL E LOCALSTORAGE
 function finalizarCompra() {
     if(carrinho.length === 0) return;
     if(!usuarioLogado) { alert("⚠️ Faça login para concluir o pedido!"); abrirAuthModal('login'); return; }
@@ -215,6 +292,9 @@ function finalizarCompra() {
     if(cep === '' || numeroCasa === '') { alert("⚠️ Por favor, informe o CEP e o Número da Casa!"); return; }
 
     const formaSelecionada = document.querySelector('input[name="forma-pagamento"]:checked').value;
+
+    // Objeto opcional para guardar os detalhes temporários do cartão caso este seja selecionado
+    let detalhesCartaoObj = null;
 
     // VALIDAÇÃO FORMULÁRIO DO CARTÃO
     if(formaSelecionada === 'Cartão de Crédito') {
@@ -226,34 +306,89 @@ function finalizarCompra() {
             alert("❌ Preencha todos os dados do cartão de crédito para continuar!");
             return;
         }
+        detalhesCartaoObj = { numero: num, nome_titular: nome, validade: val, cvv: cvv };
     }
 
-    const valorTotalCalculado = carrinho.reduce((acc, item) => acc + (item.preco * item.qtd), 0) + valorFrete;
-    const idPedidoAleatorio = Math.floor(100000 + Math.random() * 900000);
+    // Faz o abatimento do estoque antes de confirmar a compra definitiva
+    for (const item of carrinho) {
+        if ((estoqueProdutos[item.nome] || 0) < item.qtd) {
+            alert(`❌ O produto "${item.nome}" não possui estoque suficiente para fechar a compra.`);
+            return;
+        }
+    }
 
-    const novoPedido = {
-        id: idPedidoAleatorio,
-        usuarioEmail: usuarioLogado.email,
-        produtos: [...carrinho],
+    const valorSubtotalCalculado = carrinho.reduce((acc, item) => acc + (item.preco * item.qtd), 0);
+    const valorTotalCalculado = valorSubtotalCalculado + valorFrete;
+
+    // Mapeia os itens do carrinho local para enviar no formato exato que a API do backend espera
+    const itensParaBackend = carrinho.map(item => ({
+        nome: item.nome,
+        preco: item.preco,
+        quantidade: item.qtd
+    }));
+
+    // Prepara a carga de dados unificada de Pedidos + Itens do Carrinho
+    const dadosEnvioAPI = {
+        id_usuario: usuarioLogado.id || 1, // Prioriza o ID real vindo da sessão do banco
         total: valorTotalCalculado,
-        pagamento: formaSelecionada,
-        numeroCasa: numeroCasa,
-        data: new Date().toLocaleDateString('pt-BR')
+        frete: valorFrete,
+        metodo_pagamento: formaSelecionada,
+        itens: itensParaBackend,
+        detalhes_cartao: detalhesCartaoObj
     };
 
-    pedidosHistorico.push(novoPedido);
-    localStorage.setItem('ecobyte_pedidos', JSON.stringify(pedidosHistorico));
-    
-    // LIMPA E ATUALIZA ESTADOS
-    carrinho = []; valorFrete = 0;
-    document.getElementById('input-cep').value = '';
-    document.getElementById('input-numero-casa').value = '';
-    document.getElementById('resultado-frete').classList.add('hidden');
-    salvarCarrinho(); 
-    fecharCarrinho();
+    // Envia o pedido completo direto para a sua API Node.js/MySQL
+    fetch('http://localhost:3000/api/pedidos', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(dadosEnvioAPI)
+    })
+    .then(res => res.json())
+    .then(dadosResposta => {
+        if (!dadosResposta.sucesso) {
+            alert("❌ Erro no banco de dados: " + dadosResposta.erro);
+            return;
+        }
 
-    // DISPARA MODAL DE INTERAÇÃO FINANCEIRA DO MEIO ESCOLHIDO
-    abrirModalVisualizacaoPagamento(novoPedido);
+        // Deduz as unidades compradas do estoque global local apenas se gravou com sucesso no MySQL
+        carrinho.forEach(item => {
+            estoqueProdutos[item.nome] -= item.qtd;
+        });
+
+        // Monta o objeto para sincronização de histórico local com o ID retornado pelo MySQL
+        const novoPedido = {
+            id: dadosResposta.id_pedido,
+            usuarioEmail: usuarioLogado.email,
+            produtos: [...carrinho],
+            total: valorTotalCalculado,
+            pagamento: formaSelecionada,
+            numeroCasa: numeroCasa,
+            data: new Date().toLocaleDateString('pt-BR')
+        };
+
+        pedidosHistorico.push(novoPedido);
+        localStorage.setItem('ecobyte_pedidos', JSON.stringify(pedidosHistorico));
+        
+        // LIMPA E ATUALIZA ESTADOS
+        carrinho = []; valorFrete = 0;
+        document.getElementById('input-cep').value = '';
+        document.getElementById('input-numero-casa').value = '';
+        document.getElementById('resultado-frete').classList.add('hidden');
+        salvarCarrinho(); 
+        fecharCarrinho();
+
+        // ADICIONADO: Sincroniza e força a leitura dos novos valores de estoque atualizados pelo banco
+        carregarEstoqueDoBanco();
+
+        // DISPARA MODAL DE INTERAÇÃO FINANCEIRA DO MEIO ESCOLHIDO
+        abrirModalVisualizacaoPagamento(novoPedido);
+    })
+    .catch(err => {
+        console.error("Erro ao conectar à API da EcoByte:", err);
+        alert("❌ O servidor está offline ou inacessível. O pedido não foi gravado no banco.");
+    });
 }
 
 // RENDERIZADOR DOS MEIOS DE PAGAMENTO (PIX REAL E BOLETO COMPLETO)
@@ -309,7 +444,6 @@ function abrirModalVisualizacaoPagamento(pedido) {
             </div>
         `;
     } else {
-        // Fluxo de cartão conclui direto por ser imediato
         container.innerHTML = `
             <div class="py-6 space-y-3">
                 <div class="w-16 h-16 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mx-auto text-3xl"><i class="fa-solid fa-circle-check"></i></div>
@@ -396,6 +530,7 @@ window.filtrarPedidosShopee = function(tipo) {
         container.appendChild(div);
     });
 };
+
 // CONTROLE DO MENU HAMBÚRGUER MOBILE (SEM ALTERAR O SISTEMA DE PAGAMENTO/PEDIDOS)
 document.addEventListener('DOMContentLoaded', () => {
     const btnMobileMenu = document.getElementById('btn-mobile-menu');
@@ -425,7 +560,7 @@ document.addEventListener('DOMContentLoaded', () => {
         abrirCarrinho();
     });
 
-    // Intercepta e atualiza a área de login/perfil também no menu mobile
+    // Intercepta e updates a área de login/perfil também no menu mobile
     const originalAtualizarInterface = atualizarInterfaceUsuario;
     atualizarInterfaceUsuario = function() {
         originalAtualizarInterface(); // Executa a função original desktop

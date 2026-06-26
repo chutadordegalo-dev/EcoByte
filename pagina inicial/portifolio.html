@@ -32,29 +32,31 @@
 <body class="bg-eco-bg text-gray-800 font-sans">
 
     <header class="fixed w-full top-0 z-50 bg-white shadow-sm transition-all duration-300">
-    <div class="container mx-auto px-4 py-3 flex justify-between items-center">
-        <a href="inicio.html" class="flex items-center gap-3">
-            <img src="img/logoo.png" alt="Logo EcoByte" class="h-14 w-auto">
-            <span class="text-2xl font-bold text-eco-dark tracking-tight">EcoByte</span>
-        </a>
-        
-        <button id="menu-btn-portfolio" class="md:hidden text-eco-dark p-2 text-2xl focus:outline-none">
-            <i class="fa-solid fa-bars"></i>
-        </button>
-        
-        <nav class="hidden md:flex items-center gap-6 font-medium text-gray-600">
-            <a href="inicio.html" class="hover:text-eco-dark transition-colors">Home</a>
-            <a href="loja.html" class="hover:text-eco-dark transition-colors">Loja</a>
-            <a href="perfil.html" class="hover:text-eco-dark transition-colors">Perfil</a>
-        </nav>
-    </div>
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <a href="inicio.html" class="flex items-center gap-3">
+                <img src="img/logoo.png" alt="Logo EcoByte" class="h-14 w-auto">
+                <span class="text-2xl font-bold text-eco-dark tracking-tight">EcoByte</span>
+            </a>
+            
+            <button id="menu-btn-portfolio" class="md:hidden text-eco-dark p-2 text-2xl focus:outline-none">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+            
+            <nav class="hidden md:flex items-center gap-6 font-medium text-gray-600">
+                <a href="inicio.html" class="hover:text-eco-dark transition-colors">Home</a>
+                <a href="loja.html" class="hover:text-eco-dark transition-colors">Loja</a>
+                <a href="#parceiros" class="hover:text-eco-dark transition-colors">Parceiros</a>
+                <a href="perfil.html" class="hover:text-eco-dark transition-colors">Perfil</a>
+            </nav>
+        </div>
 
-    <nav id="mobile-menu-portfolio" class="hidden md:hidden bg-white border-t border-gray-100 px-4 py-4 space-y-4 shadow-lg flex flex-col font-medium text-gray-600">
-        <a href="inicio.html" class="portfolio-link hover:text-eco-dark transition-colors py-1">Home</a>
-        <a href="loja.html" class="portfolio-link hover:text-eco-dark transition-colors py-1">Loja</a>
-        <a href="perfil.html" class="portfolio-link hover:text-eco-dark transition-colors py-1">Perfil</a>
-    </nav>
-</header>
+        <nav id="mobile-menu-portfolio" class="hidden md:hidden bg-white border-t border-gray-100 px-4 py-4 space-y-4 shadow-lg flex flex-col font-medium text-gray-600">
+            <a href="inicio.html" class="portfolio-link hover:text-eco-dark transition-colors py-1">Home</a>
+            <a href="loja.html" class="portfolio-link hover:text-eco-dark transition-colors py-1">Loja</a>
+            <a href="#parceiros" class="portfolio-link hover:text-eco-dark transition-colors py-1">Parceiros</a>
+            <a href="perfil.html" class="portfolio-link hover:text-eco-dark transition-colors py-1">Perfil</a>
+        </nav>
+    </header>
 
     <main class="pt-24 min-h-screen">
         <section class="bg-eco-dark text-white py-16 text-center relative overflow-hidden">
@@ -151,14 +153,118 @@
             </div>
         </section>
 
+        <section id="parceiros" class="container mx-auto px-4 py-12 max-w-6xl scroll-mt-24">
+            <div class="text-center mb-12">
+                <span class="text-xs font-bold text-eco-blue uppercase tracking-widest bg-eco-blue/10 px-3 py-1 rounded-full">Rede Colaborativa</span>
+                <h2 class="text-3xl font-bold text-eco-dark mt-3">Nossos Parceiros de Confiança</h2>
+                <p class="text-gray-500 text-sm max-w-xl mx-auto mt-2">
+                    Instituições de peso e marcas focadas no futuro que caminham de mãos dadas com a EcoByte.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                
+                <article class="bg-white rounded-2xl border border-gray-100 shadow-md overflow-hidden flex flex-col justify-between">
+                    <div>
+                        <img src="https://images.unsplash.com/photo-1573164713988-8665fc963095?auto=format&fit=crop&w=800&q=80" alt="Vista aérea da região industrial de Contagem" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold text-eco-dark">Prefeitura de Contagem</h3>
+                            <p class="text-xs text-gray-400 font-semibold uppercase mt-1">Parceiro Governamental</p>
+                            <p class="text-gray-600 text-sm mt-3 leading-relaxed">
+                                Atua em conjunto na expansão de ecopontos em praças públicas e no suporte de campanhas de conscientização ecológica nas escolas municipais de Contagem.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="p-6 pt-0">
+                        <div class="bg-emerald-50 border border-emerald-100 p-4 rounded-xl">
+                            <p class="text-xs italic text-emerald-800">
+                                <i class="fa-solid fa-quote-left mr-1 opacity-70"></i>
+                                A EcoByte trouxe para nossa cidade uma solução moderna e limpa para o descarte tecnológico. Um projeto indispensável!
+                                <i class="fa-solid fa-quote-right ml-1 opacity-70"></i>
+                            </p>
+                            <span class="block text-[10px] font-bold text-emerald-700 mt-2 text-right">— Secretaria de Meio Ambiente</span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="bg-white rounded-2xl border border-gray-100 shadow-md overflow-hidden flex flex-col justify-between">
+                    <div>
+                        <img src="https://images.unsplash.com/photo-1449034446853-66c86144b0ad?auto=format&fit=crop&w=800&q=80" alt="Vista aérea de Belo Horizonte" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold text-eco-dark">Prefeitura de Belo Horizonte</h3>
+                            <p class="text-xs text-gray-400 font-semibold uppercase mt-1">Inclusão e Sustentabilidade</p>
+                            <p class="text-gray-600 text-sm mt-3 leading-relaxed">
+                                Apoio técnico no recolhimento de computadores antigos da rede pública e fomento do reaproveitamento de componentes para inclusão digital.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="p-6 pt-0">
+                        <div class="bg-emerald-50 border border-emerald-100 p-4 rounded-xl">
+                            <p class="text-xs italic text-emerald-800">
+                                <i class="fa-solid fa-quote-left mr-1 opacity-70"></i>
+                                Parceria fantástica que une a preservação da natureza com a tecnologia para quem mais precisa nas nossas comunidades.
+                                <i class="fa-solid fa-quote-right ml-1 opacity-70"></i>
+                            </p>
+                            <span class="block text-[10px] font-bold text-emerald-700 mt-2 text-right">— Coordenação de Inclusão Digital</span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="bg-white rounded-2xl border border-gray-100 shadow-md overflow-hidden flex flex-col justify-between">
+                    <div>
+                        <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=800&q=80" alt="TechGreen Solutions" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold text-eco-dark">TechGreen Solutions</h3>
+                            <p class="text-xs text-gray-400 font-semibold uppercase mt-1">Especialistas Ambientais</p>
+                            <p class="text-gray-600 text-sm mt-3 leading-relaxed">
+                                Empresa de consultoria verde que atua na triagem fina e reaproveitamento seguro de minerais nobres das placas eletrônicas antigas.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="p-6 pt-0">
+                        <div class="bg-emerald-50 border border-emerald-100 p-4 rounded-xl">
+                            <p class="text-xs italic text-emerald-800">
+                                <i class="fa-solid fa-quote-left mr-1 opacity-70"></i>
+                                Encontramos na EcoByte a seriedade e os certificados ideais para cumprir nossas metas mais exigentes de ESG corporativo.
+                                <i class="fa-solid fa-quote-right ml-1 opacity-70"></i>
+                            </p>
+                            <span class="block text-[10px] font-bold text-emerald-700 mt-2 text-right">— Diretoria Operacional</span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="bg-white rounded-2xl border border-gray-100 shadow-md overflow-hidden flex flex-col justify-between">
+                    <div>
+                        <img src="https://images.unsplash.com/photo-1605810230434-7631ac76ec81?auto=format&fit=crop&w=800&q=80" alt="Minas Hardware Recicla" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold text-eco-dark">Minas Hardware Recicla</h3>
+                            <p class="text-xs text-gray-400 font-semibold uppercase mt-1">Processamento de Resíduos</p>
+                            <p class="text-gray-600 text-sm mt-3 leading-relaxed">
+                                Usina de trituração industrial de grande porte parceira que garante que os plásticos e carcaças restantes virem novos insumos industriais.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="p-6 pt-0">
+                        <div class="bg-emerald-50 border border-emerald-100 p-4 rounded-xl">
+                            <p class="text-xs italic text-emerald-800">
+                                <i class="fa-solid fa-quote-left mr-1 opacity-70"></i>
+                                Agilidade e compromisso técnico impecáveis. A equipe domina todas as diretrizes ambientais nacionais de descarte. Nota dez!
+                                <i class="fa-solid fa-quote-right ml-1 opacity-70"></i>
+                            </p>
+                            <span class="block text-[10px] font-bold text-emerald-700 mt-2 text-right">— Gerência de Logística</span>
+                        </div>
+                    </div>
+                </article>
+
+            </div>
+        </section>
+
         <section class="container mx-auto px-4 py-16 text-center max-w-xl">
             <div class="bg-white p-8 rounded-2xl shadow-xl border border-gray-100">
                 <i class="fa-solid fa-seedling text-4xl text-eco-light mb-4"></i>
                 <h3 class="text-2xl font-bold text-eco-dark mb-2">Sua empresa quer fazer parte desta lista?</h3>
                 <p class="text-gray-600 text-sm mb-6">Agende uma coleta corporativa dedicada e receba o selo e certificado de Destinação Verde.</p>
-                <a href="index.html#contato" class="inline-block bg-eco-dark text-white px-8 py-3 rounded-xl font-bold hover:bg-eco-blue transition-colors shadow-md">
-                    Iniciar Parceria
-                </a>
+                
             </div>
         </section>
     </main>
@@ -169,7 +275,8 @@
             <p class="text-xs">Trabalho Técnico de Conclusão - Curso Técnico SENAC</p>
         </div>
     </footer>
-<script>
+
+    <script>
         document.addEventListener("DOMContentLoaded", () => {
             const menuBtn = document.getElementById('menu-btn-portfolio');
             const mobileMenu = document.getElementById('mobile-menu-portfolio');
@@ -187,7 +294,6 @@
                     }
                 });
                 
-                // Fecha o menu móvel automaticamente ao clicar em qualquer link
                 portfolioLinks.forEach(link => {
                     link.addEventListener('click', () => {
                         mobileMenu.classList.add('hidden');

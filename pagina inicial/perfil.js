@@ -42,18 +42,50 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
+    // ATUALIZADO: Evento ajustado para sincronizar com o banco de dados MySQL
     formPerfil.addEventListener("submit", (e) => {
         e.preventDefault();
         const novoNome = inputUsername.value.trim();
-        if (novoNome) {
-            userDisplayName.innerText = novoNome;
-            usuarioLogado.nome = novoNome;
-            localStorage.setItem('ecobyte_sessao', JSON.stringify(usuarioLogado));
-
-            usuariosRegistrados = usuariosRegistrados.map(u => u.email === usuarioLogado.email ? { ...u, nome: novoNome } : u);
-            localStorage.setItem('ecobyte_usuarios', JSON.stringify(usuariosRegistrados));
-            alert("🎉 Modificações salvas com sucesso!");
+        
+        if (!novoNome) {
+            alert("⚠️ O nome não pode ficar vazio.");
+            return;
         }
+
+        // Faz uma chamada PUT para salvar no banco MySQL
+        fetch('http://localhost:3000/api/usuarios/atualizar-nome', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                id_usuario: usuarioLogado.id, // Envia o ID numérico do banco
+                novo_nome: novoNome
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.sucesso) {
+                // Altera o texto visual do perfil na tela
+                userDisplayName.innerText = novoNome;
+                
+                // Sincroniza a sessão local do usuário logado
+                usuarioLogado.nome = novoNome;
+                localStorage.setItem('ecobyte_sessao', JSON.stringify(usuarioLogado));
+
+                // Sincroniza o array de usuários simulados locais
+                usuariosRegistrados = usuariosRegistrados.map(u => u.email === usuarioLogado.email ? { ...u, nome: novoNome } : u);
+                localStorage.setItem('ecobyte_usuarios', JSON.stringify(usuariosRegistrados));
+                
+                alert("🎉 Modificações salvas com sucesso no banco de dados!");
+            } else {
+                alert("❌ Erro ao atualizar no banco: " + data.erro);
+            }
+        })
+        .catch(err => {
+            console.error("Erro de rede:", err);
+            alert("❌ Não foi possível se conectar com o servidor.");
+        });
     });
 
     btnLogout.addEventListener("click", encerrarSessao);
@@ -64,23 +96,27 @@ document.addEventListener("DOMContentLoaded", () => {
         window.location.href = "loja.html";
     }
 });
+
 // --- Lógica do Menu Hambúrguer Mobile ---
-    const btnMobileMenu = document.getElementById('btn-mobile-menu');
-    const mobileMenu = document.getElementById('mobile-menu');
-    const btnLogoutMobile = document.getElementById('btn-logout-mobile');
+const btnMobileMenu = document.getElementById('btn-mobile-menu');
+const mobileMenu = document.getElementById('mobile-menu');
+const btnLogoutMobile = document.getElementById('btn-logout-mobile');
 
-    // Abre e fecha o menu
-    btnMobileMenu.addEventListener('click', () => {
-        mobileMenu.classList.toggle('hidden');
-        const icone = btnMobileMenu.querySelector('i');
-        if (mobileMenu.classList.contains('hidden')) {
-            icone.className = "fa-solid fa-bars";
-        } else {
-            icone.className = "fa-solid fa-xmark";
-        }
-    });
-
-    // Logout via menu mobile
-    if (btnLogoutMobile) {
-        btnLogoutMobile.addEventListener('click', encerrarSessao);
+// Abre e fecha o menu
+btnMobileMenu.addEventListener('click', () => {
+    mobileMenu.classList.toggle('hidden');
+    const icone = btnMobileMenu.querySelector('i');
+    if (mobileMenu.classList.contains('hidden')) {
+        icone.className = "fa-solid fa-bars";
+    } else {
+        icone.className = "fa-solid fa-xmark";
     }
+});
+
+// Logout via menu mobile
+if (btnLogoutMobile) {
+    btnLogoutMobile.addEventListener('click', () => {
+        localStorage.removeItem('ecobyte_sessao');
+        window.location.href = "loja.html";
+    });
+}
