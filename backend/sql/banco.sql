@@ -1,5 +1,5 @@
 -- 1. Apaga o banco anterior se ele existir para começar do zero absoluto
-DROP DATABASE IF EXISTS ecobyte_db;
+DROP DATABASE IF EXISTS produtosadicionar;
 CREATE DATABASE ecobyte_db;
 USE ecobyte_db;
 
@@ -65,6 +65,15 @@ CREATE TABLE IF NOT EXISTS coletas_corporativas (
     descricao TEXT NOT NULL,
     criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+CREATE TABLE IF NOT EXISTS pontos_coleta (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(255) NOT NULL,
+    endereco VARCHAR(255) NOT NULL,
+    lat DECIMAL(10, 8) NOT NULL,
+    lng DECIMAL(11, 8) NOT NULL,
+    data_cadastro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 
 -- Inserção de alguns produtos fictícios para teste inicial de estoque
 USE ecobyte_db;

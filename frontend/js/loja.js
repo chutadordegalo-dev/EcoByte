@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
     salvarCarrinho();
     configurarMudancaPagamento();
     
-    // Busca os estoques e produtos direto do MySQL assim que a página carrega e monta a vitrine
+    // Busca os estoques e produtos direto do MySQL assim que a página carrega
     carregarEstoqueDoBanco();
 });
 
@@ -35,82 +35,92 @@ function inicializarElementosDOM() {
     document.getElementById('btn-finalizar-compra').addEventListener('click', finalizarCompra);
 }
 
-// ADICIONADO/MODIFICADO: Função 100% dinâmica que gera os cards da vitrine direto do MySQL
-function carregarEstoqueDoBanco() {
-    fetch('http://localhost:3000/api/produtos')
-        .then(res => res.json())
-        .then(produtos => {
-            const vitrine = document.getElementById('vitrine-produtos');
-            if (!vitrine) return;
-
-            // Limpa qualquer conteúdo antigo ou estático da vitrine
-            vitrine.innerHTML = ''; 
-            
-            // Reseta o objeto de controle global de estoque
-            estoqueProdutos = {}; 
-
-            produtos.forEach(p => {
-                // Sincroniza a quantidade para validações internas de carrinho no script
-                estoqueProdutos[p.nome] = p.quantidade;
-
-                // Verifica o status do estoque para mudar as cores e o botão
-                const indisponivel = p.quantidade <= 0;
-                
-                let textoEstoque = '';
-                if (indisponivel) {
-                    textoEstoque = `<span class="font-semibold text-red-500 text-xs bg-red-50 px-2.5 py-1 rounded-full"><i class="fa-solid fa-circle-xmark mr-1"></i>Esgotado</span>`;
-                } else {
-                    textoEstoque = `<span class="font-semibold text-emerald-600 text-xs bg-emerald-50 px-2.5 py-1 rounded-full"><i class="fa-solid fa-circle-check mr-1"></i>${p.quantidade} un. disponíveis</span>`;
-                }
-
-                // Cria o Card do Produto utilizando as classes visuais do Tailwind
-                const card = document.createElement('div');
-                card.className = "bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex flex-col justify-between hover:shadow-md transition-shadow duration-300";
-                
-                card.innerHTML = `
-                    <div>
-                        <div class="w-full h-36 bg-gray-50 rounded-xl p-3 flex items-center justify-center mb-3">
-                            <img src="${p.imagem || '../img/default-product.png'}" alt="${p.nome}" class="max-h-full max-w-full object-contain mix-blend-multiply">
-                        </div>
-                        
-                        <h3 class="font-bold text-gray-800 text-sm line-clamp-2 h-10 mb-2" title="${p.nome}">${p.nome}</h3>
-                        
-                        <div class="mb-4">${textoEstoque}</div>
-                    </div>
-                    
-                    <div>
-                        <p class="text-eco-dark font-extrabold text-base mb-3">R$ ${parseFloat(p.preco).toFixed(2).replace('.', ',')}</p>
-                        
-                        <button 
-                            onclick="adicionarAoCarrinho('${p.nome.replace(/'/g, "\\'")}', ${p.preco})"
-                            ${indisponivel ? 'disabled class="w-full bg-gray-200 text-gray-400 py-2.5 rounded-xl font-bold text-xs cursor-not-allowed"' : 'class="w-full bg-eco-dark text-white py-2.5 rounded-xl font-bold text-xs hover:bg-eco-blue transition shadow-sm font-sans"'}
-                        >
-                            ${indisponivel ? 'Indisponível' : '<i class="fa-solid fa-cart-plus mr-1"></i> Adicionar ao Carrinho'}
-                        </button>
-                    </div>
-                `;
-                
-                // Adiciona o card gerado dentro da vitrine html
-                vitrine.appendChild(card);
-            });
-
-            // Atualiza o backup de segurança do localStorage
-            localStorage.setItem('ecobyte_estoque', JSON.stringify(estoqueProdutos));
-        })
-        .catch(err => {
-            console.error("❌ Erro ao sincronizar produtos do banco com a vitrine:", err);
-            
-            // Fallback de segurança se a API estiver offline
-            const vitrine = document.getElementById('vitrine-produtos');
-            if (vitrine && vitrine.children.length === 0) {
-                vitrine.innerHTML = `
-                    <div class="col-span-full text-center py-8 text-gray-500 text-xs">
-                        <i class="fa-solid fa-triangle-exclamation text-amber-500 text-2xl block mb-2"></i>
-                        Não foi possível carregar a vitrine em tempo real. O servidor está offline.
-                    </div>
-                `;
-            }
+// Busca dinamicamente os valores de estoque do banco de dados e atualiza a interface
+async function carregarEstoqueDoBanco() {
+    const container = document.getElementById('container-produtos');
+    
+    try {
+        const res = await fetch('http://localhost:3000/api/produtos');
+        const produtos = await res.json();
+        
+        // Mapeia o array de linhas do banco para o formato de objeto esperado pelo restante do script
+        estoqueProdutos = {};
+        produtos.forEach(p => {
+            estoqueProdutos[p.nome] = p.quantidade;
         });
+        
+        // Atualiza o localStorage de backup
+        localStorage.setItem('ecobyte_estoque', JSON.stringify(estoqueProdutos));
+        
+        // Se o container de cards dinâmicos existir, renderiza eles
+        if (container) {
+            let html = '';
+            produtos.forEach(prod => {
+                html += `
+                    <div class="bg-white p-5 rounded-3xl border border-gray-100 flex flex-col justify-between shadow-sm hover:shadow-md transition-shadow relative overflow-hidden group">
+                        <div>
+                            <div class="bg-gray-50 rounded-2xl p-4 h-40 flex items-center justify-center mb-4 relative overflow-hidden border border-gray-50">
+                                <img src="${prod.imagem || 'img/default.png'}" alt="${prod.nome}" class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300">
+                            </div>
+                            <h3 class="font-bold text-gray-800 text-sm mb-1">${prod.nome}</h3>
+                            <p class="text-xs text-gray-400 mb-3">Estoque: <span class="text-eco-dark font-semibold">${prod.quantidade} un</span></p>
+                        </div>
+                        <div>
+                            <div class="flex items-baseline gap-1 mb-4">
+                                <span class="text-xs font-semibold text-eco-dark">R$</span>
+                                <span class="text-xl font-bold text-eco-dark">${parseFloat(prod.preco).toFixed(2).replace('.', ',')}</span>
+                            </div>
+                            <button onclick="adicionarAoCarrinho('${prod.nome}', ${prod.preco})" class="w-full bg-eco-dark text-white py-2.5 rounded-xl text-xs font-bold tracking-wide hover:bg-eco-blue flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-cart-plus"></i> Adicionar ao Carrinho
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        // Atualiza os indicadores estáticos se houverem
+        atualizarExibicaoEstoque();
+
+    } catch (err) {
+        console.error("Erro ao sincronizar estoque com o banco de dados:", err);
+        
+        // Fallback de segurança: Caso o servidor caia, usa o último guardado ou valores padrão
+        estoqueProdutos = JSON.parse(localStorage.getItem('ecobyte_estoque')) || {
+            "NVIDIA GTX 1660 Super 6GB": 5,
+            "SSD Kingston A400 480GB Sata III": 12,
+            "Memória RAM HyperX Fury 8GB DDR4": 8,
+            "Intel Core i5-10400F 2.9GHz": 4
+        };
+        atualizarExibicaoEstoque();
+    }
+}
+
+// Renderiza as quantidades atuais de estoque nos elementos estáticos HTML correspondentes (se existirem)
+function atualizarExibicaoEstoque() {
+    const mapaId = {
+        "NVIDIA GTX 1660 Super 6GB": "estoque-prod-1",
+        "SSD Kingston A400 480GB Sata III": "estoque-prod-2",
+        "Memória RAM HyperX Fury 8GB DDR4": "estoque-prod-3",
+        "Intel Core i5-10400F 2.9GHz": "estoque-prod-4"
+    };
+
+    Object.keys(mapaId).forEach(nomeProduto => {
+        const elementoId = mapaId[nomeProduto];
+        const elemento = document.getElementById(elementoId);
+        if (elemento) {
+            const qtdEstoque = estoqueProdutos[nomeProduto] !== undefined ? estoqueProdutos[nomeProduto] : 0;
+            if (qtdEstoque <= 0) {
+                elemento.innerText = "Esgotado";
+                elemento.className = "font-semibold text-red-500";
+            } else {
+                elemento.innerText = `${qtdEstoque} un.`;
+                elemento.className = "font-semibold text-emerald-600";
+            }
+        }
+    });
+    localStorage.setItem('ecobyte_estoque', JSON.stringify(estoqueProdutos));
 }
 
 // MONITOR DE EXIBIÇÃO DE OPÇÃO DE CARTÃO
@@ -120,21 +130,26 @@ function configurarMudancaPagamento() {
     
     radios.forEach(radio => {
         radio.addEventListener('change', (e) => {
-            if(e.target.value === 'Cartão de Crédito') {
-                secaoCartao.classList.remove('hidden');
-            } else {
-                secaoCartao.classList.add('hidden');
+            if(secaoCartao) {
+                if(e.target.value === 'Cartão de Crédito') {
+                    secaoCartao.classList.remove('hidden');
+                } else {
+                    secaoCartao.classList.add('hidden');
+                }
             }
         });
     });
 }
 
-// AUTH
-function abrirAuthModal(modo = 'login') {
+// AUTH MODAL
+window.abrirAuthModal = function(modo = 'login') {
     document.getElementById('modal-auth').classList.remove('hidden');
     mudarAbaAuth(modo);
-}
-function fecharAuthModal() { document.getElementById('modal-auth').classList.add('hidden'); }
+};
+
+window.fecharAuthModal = function() { 
+    document.getElementById('modal-auth').classList.add('hidden'); 
+};
 
 function mudarAbaAuth(modo) {
     modoAuthAtual = modo;
@@ -144,15 +159,15 @@ function mudarAbaAuth(modo) {
     const btnSubmit = document.getElementById('btn-submit-auth');
 
     if (modo === 'login') {
-        btnLogin.className = "flex-1 pb-3 border-b-2 border-orange-500 text-orange-600 font-bold";
-        btnCadastro.className = "flex-1 pb-3 border-b-2 border-transparent text-gray-400";
-        campoNome.classList.add('hidden');
-        btnSubmit.innerText = "Entrar na Conta";
+        if(btnLogin) btnLogin.className = "flex-1 pb-3 border-b-2 border-orange-500 text-orange-600 font-bold";
+        if(btnCadastro) btnCadastro.className = "flex-1 pb-3 border-b-2 border-transparent text-gray-400";
+        if(campoNome) campoNome.classList.add('hidden');
+        if(btnSubmit) btnSubmit.innerText = "Entrar na Conta";
     } else {
-        btnCadastro.className = "flex-1 pb-3 border-b-2 border-orange-500 text-orange-600 font-bold";
-        btnLogin.className = "flex-1 pb-3 border-b-2 border-transparent text-gray-400";
-        campoNome.classList.remove('hidden');
-        btnSubmit.innerText = "Criar Minha Conta";
+        if(btnCadastro) btnCadastro.className = "flex-1 pb-3 border-b-2 border-orange-500 text-orange-600 font-bold";
+        if(btnLogin) btnLogin.className = "flex-1 pb-3 border-b-2 border-transparent text-gray-400";
+        if(campoNome) campoNome.classList.remove('hidden');
+        if(btnSubmit) btnSubmit.innerText = "Criar Minha Conta";
     }
 }
 
@@ -160,7 +175,7 @@ function realizarAutenticacao(event) {
     event.preventDefault();
     const email = document.getElementById('auth-email').value.trim();
     const senha = document.getElementById('auth-senha').value;
-    const nome = document.getElementById('auth-nome').value.trim();
+    const nome = document.getElementById('auth-nome') ? document.getElementById('auth-nome').value.trim() : "";
 
     if (modoAuthAtual === 'cadastro') {
         if (usuariosRegistrados.some(u => u.email === email)) {
@@ -190,21 +205,28 @@ window.realizarLogout = function() {
 function atualizarInterfaceUsuario() {
     usuarioLogado = JSON.parse(localStorage.getItem('ecobyte_sessao'));
     const wrapper = document.getElementById('area-autenticada');
+    const wrapperMobile = document.getElementById('area-autenticada-mobile');
+
+    const htmlLogado = () => `
+        <a href="perfil.html" class="flex items-center gap-2 hover:opacity-80 transition-opacity">
+            <img src="${usuarioLogado.foto || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3'}" class="w-7 h-7 rounded-full object-cover border border-eco-light">
+            <span class="text-xs font-bold text-eco-dark">Meu Perfil (${usuarioLogado.nome.split(' ')[0]})</span>
+        </a>
+        <button onclick="realizarLogout()" class="text-red-500 text-xs font-bold" title="Sair"><i class="fa-solid fa-power-off"></i></button>
+    `;
+
+    const htmlDeslogado = () => `
+        <button onclick="abrirAuthModal('login')" class="text-xs font-bold text-gray-600 hover:text-eco-dark focus:outline-none">Entre</button>
+        <span class="text-gray-300 text-xs">|</span>
+        <button onclick="abrirAuthModal('cadastro')" class="text-xs font-bold text-orange-600 hover:text-orange-700 bg-orange-50 px-3 py-1.5 rounded-full focus:outline-none">Cadastre-se</button>
+    `;
 
     if (usuarioLogado) {
-        wrapper.innerHTML = `
-            <a href="perfil.html" class="flex items-center gap-2 hover:opacity-80 transition-opacity">
-                <img src="${usuarioLogado.foto || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3'}" class="w-7 h-7 rounded-full object-cover border border-eco-light">
-                <span class="text-xs font-bold text-eco-dark">Meu Perfil (${usuarioLogado.nome.split(' ')[0]})</span>
-            </a>
-            <button onclick="realizarLogout()" class="text-red-500 text-xs font-bold" title="Sair"><i class="fa-solid fa-power-off"></i></button>
-        `;
+        if(wrapper) wrapper.innerHTML = htmlLogado();
+        if(wrapperMobile) wrapperMobile.innerHTML = htmlLogado();
     } else {
-        wrapper.innerHTML = `
-            <button onclick="abrirAuthModal('login')" class="text-xs font-bold text-gray-600 hover:text-eco-dark focus:outline-none">Entre</button>
-            <span class="text-gray-300 text-xs">|</span>
-            <button onclick="abrirAuthModal('cadastro')" class="text-xs font-bold text-orange-600 hover:text-orange-700 bg-orange-50 px-3 py-1.5 rounded-full focus:outline-none">Cadastre-se</button>
-        `;
+        if(wrapper) wrapper.innerHTML = htmlDeslogado();
+        if(wrapperMobile) wrapperMobile.innerHTML = htmlDeslogado();
     }
 }
 
@@ -218,14 +240,16 @@ function salvarCarrinho() {
 function atualizarBadge() {
     const contador = document.getElementById('carrinho-contador');
     const totalItens = carrinho.reduce((acc, item) => acc + item.qtd, 0);
-    if(totalItens > 0) { contador.innerText = totalItens; contador.classList.remove('hidden'); }
-    else { contador.classList.add('hidden'); }
+    if(contador) {
+        if(totalItens > 0) { contador.innerText = totalItens; contador.classList.remove('hidden'); }
+        else { contador.classList.add('hidden'); }
+    }
 }
 
 window.adicionarAoCarrinho = function(nome, preco) {
     const item = carrinho.find(i => i.nome === nome);
     const qtdAtualNoCarrinho = item ? item.qtd : 0;
-    const estoqueDisponivel = estoqueProdutos[nome] || 0;
+    const { [nome]: estoqueDisponivel = 0 } = estoqueProdutos;
 
     if (qtdAtualNoCarrinho + 1 > estoqueDisponivel) {
         alert("⚠️ Limite de estoque atingido para este item!");
@@ -273,9 +297,13 @@ function renderizarCarrinho() {
     const freteElemento = document.getElementById('resumo-frete');
     const totalElemento = document.getElementById('carrinho-total');
     
+    if(!container) return;
+
     if(carrinho.length === 0) {
         container.innerHTML = '<p class="text-gray-500 text-xs text-center py-6">Seu carrinho está vazio.</p>';
-        subtotalElemento.innerText = 'R$ 0,00'; freteElemento.innerText = 'R$ 0,00'; totalElemento.innerText = 'R$ 0,00';
+        if(subtotalElemento) subtotalElemento.innerText = 'R$ 0,00'; 
+        if(freteElemento) freteElemento.innerText = 'R$ 0,00'; 
+        if(totalElemento) totalElemento.innerText = 'R$ 0,00';
         return;
     }
 
@@ -290,21 +318,21 @@ function renderizarCarrinho() {
                 <p class="text-gray-500">R$ ${item.preco.toFixed(2).replace('.', ',')}</p>
             </div>
             <div class="flex items-center gap-1 bg-white border border-gray-200 rounded-lg px-1.5">
-                <button onclick="alterarQuantidade('${item.nome.replace(/'/g, "\\'")}', -1)" class="font-bold text-gray-500 hover:text-eco-dark px-1">-</button>
+                <button onclick="alterarQuantidade('${item.nome}', -1)" class="font-bold text-gray-500 hover:text-eco-dark px-1">-</button>
                 <span class="font-bold text-center text-xs w-4">${item.qtd}</span>
-                <button onclick="alterarQuantidade('${item.nome.replace(/'/g, "\\'")}', 1)" class="font-bold text-gray-500 hover:text-eco-dark px-1">+</button>
+                <button onclick="alterarQuantidade('${item.nome}', 1)" class="font-bold text-gray-500 hover:text-eco-dark px-1">+</button>
             </div>
-            <button onclick="removerItem('${item.nome.replace(/'/g, "\\'")}')" class="text-red-500 ml-2"><i class="fa-solid fa-trash"></i></button>
+            <button onclick="removerItem('${item.nome}')" class="text-red-500 ml-2"><i class="fa-solid fa-trash"></i></button>
         `;
         container.appendChild(div);
     });
 
-    subtotalElemento.innerText = `R$ ${valorSubtotal.toFixed(2).replace('.', ',')}`;
-    freteElemento.innerText = valorFrete > 0 ? `R$ ${valorFrete.toFixed(2).replace('.', ',')}` : 'A calcular';
-    totalElemento.innerText = `R$ ${(valorSubtotal + valorFrete).toFixed(2).replace('.', ',')}`;
+    if(subtotalElemento) subtotalElemento.innerText = `R$ ${valorSubtotal.toFixed(2).replace('.', ',')}`;
+    if(freteElemento) freteElemento.innerText = valorFrete > 0 ? `R$ ${valorFrete.toFixed(2).replace('.', ',')}` : 'A calcular';
+    if(totalElemento) totalElemento.innerText = `R$ ${(valorSubtotal + valorFrete).toFixed(2).replace('.', ',')}`;
 }
 
-// CHECKOUT INTEGRADO COM MYSQL
+// CHECKOUT INTEGRADO
 function finalizarCompra() {
     if(carrinho.length === 0) return;
     if(!usuarioLogado) { alert("⚠️ Faça login para concluir o pedido!"); abrirAuthModal('login'); return; }
@@ -313,7 +341,10 @@ function finalizarCompra() {
     const numeroCasa = document.getElementById('input-numero-casa').value.trim();
     if(cep === '' || numeroCasa === '') { alert("⚠️ Por favor, informe o CEP e o Número da Casa!"); return; }
 
-    const formaSelecionada = document.querySelector('input[name="forma-pagamento"]:checked').value;
+    const formaSelecionadaElemento = document.querySelector('input[name="forma-pagamento"]:checked');
+    if(!formaSelecionadaElemento) { alert("⚠️ Escolha uma forma de pagamento!"); return; }
+    const formaSelecionada = formaSelecionadaElemento.value;
+
     let detalhesCartaoObj = null;
 
     if(formaSelecionada === 'Cartão de Crédito') {
@@ -365,6 +396,10 @@ function finalizarCompra() {
             return;
         }
 
+        carrinho.forEach(item => {
+            estoqueProdutos[item.nome] -= item.qtd;
+        });
+
         const novoPedido = {
             id: dadosResposta.id_pedido,
             usuarioEmail: usuarioLogado.email,
@@ -385,13 +420,11 @@ function finalizarCompra() {
         salvarCarrinho(); 
         fecharCarrinho();
 
-        // Recarrega o estoque vindo do banco e atualiza os cards na tela automaticamente
         carregarEstoqueDoBanco();
-
         abrirModalVisualizacaoPagamento(novoPedido);
     })
     .catch(err => {
-        console.error("Erro ao conectar à API:", err);
+        console.error("Erro ao conectar à API da EcoByte:", err);
         alert("❌ O servidor está offline ou inacessível. O pedido não foi gravado no banco.");
     });
 }
@@ -399,8 +432,9 @@ function finalizarCompra() {
 function abrirModalVisualizacaoPagamento(pedido) {
     const modal = document.getElementById('modal-checkout-resultado');
     const container = document.getElementById('conteudo-checkout-resultado');
+    if(!modal || !container) return;
+    
     modal.classList.remove('hidden');
-
     const totalFormatado = pedido.total.toFixed(2).replace('.', ',');
 
     if(pedido.pagamento === 'Pix') {
@@ -411,14 +445,11 @@ function abrirModalVisualizacaoPagamento(pedido) {
                 <h4 class="font-bold text-emerald-600 flex items-center gap-1 text-sm"><i class="fa-solid fa-pix"></i> Pagamento via Pix</h4>
                 <button onclick="fecharModalResultado()" class="text-gray-400 hover:text-gray-600 text-lg font-bold">×</button>
             </div>
-            <p class="text-xs text-gray-600 leading-relaxed">Escaneie o QR Code abaixo pelo aplicativo do seu banco para concluir o pagamento de <strong>R$ ${totalFormatado}</strong> do Pedido <strong>#${pedido.id}</strong>.</p>
-            
+            <p class="text-xs text-gray-600 leading-relaxed">Escaneie o QR Code abaixo para concluir o pagamento de <strong>R$ ${totalFormatado}</strong> do Pedido <strong>#${pedido.id}</strong>.</p>
             <div class="bg-gray-100 p-3 w-48 h-48 mx-auto rounded-xl flex items-center justify-center shadow-inner">
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(payloadPixSimulado)}" class="w-full h-full" alt="QR Code Pix EcoByte">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(payloadPixSimulado)}" class="w-full h-full" alt="QR Code Pix">
             </div>
-
             <div class="text-center"><span class="bg-amber-100 text-amber-800 font-bold px-3 py-1 rounded-full text-[10px]"><i class="fa-regular fa-clock mr-1"></i> Expira em <span id="pix-cronometro">05:00</span></span></div>
-
             <div class="space-y-2">
                 <label class="block text-left text-[11px] font-bold text-gray-500">Pix Copia e Cola:</label>
                 <input type="text" readonly value="${payloadPixSimulado}" id="input-pix-copia-cola" class="w-full bg-gray-50 border p-2 rounded-lg text-[10px] outline-none text-gray-500 truncate">
@@ -435,16 +466,13 @@ function abrirModalVisualizacaoPagamento(pedido) {
                 <h4 class="font-bold text-gray-700 flex items-center gap-1 text-sm"><i class="fa-solid fa-barcode"></i> Boleto Bancário Gerado</h4>
                 <button onclick="fecharModalResultado()" class="text-gray-400 hover:text-gray-600 text-lg font-bold">×</button>
             </div>
-            <p class="text-xs text-gray-600">Seu boleto referente ao pedido <strong>#${pedido.id}</strong> foi gerado com sucesso no valor de <strong>R$ ${totalFormatado}</strong>.</p>
-            
+            <p class="text-xs text-gray-600">Seu boleto do pedido <strong>#${pedido.id}</strong> foi gerado no valor de <strong>R$ ${totalFormatado}</strong>.</p>
             <div class="border-2 border-dashed border-gray-300 p-4 rounded-xl bg-gray-50 font-mono text-center space-y-2">
                 <i class="fa-solid fa-barcode text-5xl text-gray-800 block tracking-widest"></i>
                 <span class="text-[10px] text-gray-500 block break-all" id="texto-boleto-barra">${codBarrasSimulado}</span>
             </div>
-
             <div class="space-y-2">
                 <button onclick="copiarTextoCheckout('texto-boleto-barra', 'Linha digitável copiada!', true)" class="w-full bg-gray-800 hover:bg-gray-900 text-white font-bold py-2 rounded-lg text-xs transition"><i class="fa-regular fa-copy mr-1"></i> Copiar Linha Digitável</button>
-                <button onclick="alert('Simulando Impressão do Boleto PDF...')" class="w-full border border-gray-300 hover:bg-gray-50 text-gray-700 font-bold py-2 rounded-lg text-xs transition"><i class="fa-solid fa-print mr-1"></i> Imprimir Boleto</button>
             </div>
         `;
     } else {
@@ -452,7 +480,7 @@ function abrirModalVisualizacaoPagamento(pedido) {
             <div class="py-6 space-y-3">
                 <div class="w-16 h-16 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mx-auto text-3xl"><i class="fa-solid fa-circle-check"></i></div>
                 <h4 class="font-bold text-gray-800 text-base">Pagamento Aprovado!</h4>
-                <p class="text-xs text-gray-500 max-w-xs mx-auto">Seu cartão de crédito foi processado com sucesso. O pedido <strong>#${pedido.id}</strong> foi enviado para faturamento.</p>
+                <p class="text-xs text-gray-500 max-w-xs mx-auto">Seu cartão foi processado. O pedido <strong>#${pedido.id}</strong> foi enviado para faturamento.</p>
                 <button onclick="fecharModalResultado(); abrirPedidos();" class="bg-blue-600 text-white font-bold px-6 py-2 rounded-xl text-xs hover:bg-blue-700 transition">Ver nos Meus Pedidos</button>
             </div>
         `;
@@ -482,9 +510,15 @@ function dispararCronometroPix() {
     }, 1000);
 }
 
-// MEUS PEDIDOS ESTILO SHOPEE
-function abrirPedidos() { document.getElementById('modal-pedidos').classList.remove('hidden'); filtrarPedidosShopee(filtroAbaAtual); }
-function fecharPedidos() { document.getElementById('modal-pedidos').classList.add('hidden'); }
+// MEUS PEDIDOS
+window.abrirPedidos = function() { 
+    document.getElementById('modal-pedidos').classList.remove('hidden'); 
+    filtrarPedidosShopee(filtroAbaAtual); 
+};
+
+window.fecharPedidos = function() { 
+    document.getElementById('modal-pedidos').classList.add('hidden'); 
+};
 
 window.filtrarPedidosShopee = function(tipo) {
     filtroAbaAtual = tipo;
@@ -492,11 +526,14 @@ window.filtrarPedidosShopee = function(tipo) {
     
     Object.keys(abas).forEach(key => {
         const el = document.getElementById(abas[key]);
-        if(key === tipo) el.className = "flex-1 py-3 text-orange-600 border-b-2 border-orange-500";
-        else el.className = "flex-1 py-3 text-gray-500 border-b-2 border-transparent hover:text-orange-600";
+        if(el) {
+            if(key === tipo) el.className = "flex-1 py-3 text-orange-600 border-b-2 border-orange-500";
+            else el.className = "flex-1 py-3 text-gray-500 border-b-2 border-transparent hover:text-orange-600";
+        }
     });
 
     const container = document.getElementById('lista-pedidos-container');
+    if(!container) return;
     if(!usuarioLogado) { container.innerHTML = '<p class="text-center text-gray-400 text-xs py-6">Faça login para ver seus pedidos.</p>'; return; }
 
     let filtrados = pedidosHistorico.filter(p => p.usuarioEmail === usuarioLogado.email);
@@ -535,58 +572,83 @@ window.filtrarPedidosShopee = function(tipo) {
     });
 };
 
-// CONTROLE DO MENU HAMBÚRGUER MOBILE
+// MENU HAMBÚRGUER MOBILE E FORMULÁRIO DE CADASTRO DE PRODUTO DIRECTO DA LOJA
 document.addEventListener('DOMContentLoaded', () => {
     const btnMobileMenu = document.getElementById('btn-mobile-menu');
     const mobileMenu = document.getElementById('mobile-menu');
 
-    btnMobileMenu.addEventListener('click', () => {
-        mobileMenu.classList.toggle('hidden');
-        const icone = btnMobileMenu.querySelector('i');
-        if (mobileMenu.classList.contains('hidden')) {
-            icone.className = "fa-solid fa-bars";
-        } else {
-            icone.className = "fa-solid fa-xmark";
-        }
-    });
+    if(btnMobileMenu && mobileMenu) {
+        btnMobileMenu.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+            const icone = btnMobileMenu.querySelector('i');
+            if (mobileMenu.classList.contains('hidden')) {
+                icone.className = "fa-solid fa-bars";
+            } else {
+                icone.className = "fa-solid fa-xmark";
+            }
+        });
+    }
 
-    document.getElementById('btn-meus-pedidos-mobile').addEventListener('click', () => {
-        mobileMenu.classList.add('hidden');
-        btnMobileMenu.querySelector('i').className = "fa-solid fa-bars";
-        abrirPedidos();
-    });
+    const btnMeusPedidosMobile = document.getElementById('btn-meus-pedidos-mobile');
+    if(btnMeusPedidosMobile) {
+        btnMeusPedidosMobile.addEventListener('click', () => {
+            mobileMenu.classList.add('hidden');
+            if(btnMobileMenu) btnMobileMenu.querySelector('i').className = "fa-solid fa-bars";
+            abrirPedidos();
+        });
+    }
 
-    document.getElementById('btn-abrir-carrinho-mobile').addEventListener('click', () => {
-        mobileMenu.classList.add('hidden');
-        btnMobileMenu.querySelector('i').className = "fa-solid fa-bars";
-        abrirCarrinho();
-    });
+    const btnAbrirCarrinhoMobile = document.getElementById('btn-abrir-carrinho-mobile');
+    if(btnAbrirCarrinhoMobile) {
+        btnAbrirCarrinhoMobile.addEventListener('click', () => {
+            mobileMenu.classList.add('hidden');
+            if(btnMobileMenu) btnMobileMenu.querySelector('i').className = "fa-solid fa-bars";
+            abrirCarrinho();
+        });
+    }
 
-    const originalAtualizarInterface = atualizarInterfaceUsuario;
-    atualizarInterfaceUsuario = function() {
-        originalAtualizarInterface(); 
-        
-        usuarioLogado = JSON.parse(localStorage.getItem('ecobyte_sessao'));
-        const wrapperMobile = document.getElementById('area-autenticada-mobile');
-        if(!wrapperMobile) return;
+    // LISTENER PARA O FORMULÁRIO DE CRIAR PRODUTO DIRETO NA PÁGINA LOJA.HTML
+    const formProdutoLoja = document.getElementById('form-produto-loja-direto');
+    if (formProdutoLoja) {
+        formProdutoLoja.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const inputNome = document.getElementById('prod-loja-nome');
+            const inputPreco = document.getElementById('prod-loja-preco');
+            const inputQtd = document.getElementById('prod-loja-qtd');
+            const inputImg = document.getElementById('prod-loja-img');
 
-        if (usuarioLogado) {
-            wrapperMobile.innerHTML = `
-                <a href="perfil.html" class="flex items-center gap-2 hover:opacity-80 transition-opacity py-1">
-                    <img src="${usuarioLogado.foto || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3'}" class="w-7 h-7 rounded-full object-cover border border-eco-light">
-                    <span class="text-xs font-bold text-eco-dark">Meu Perfil (${usuarioLogado.nome.split(' ')[0]})</span>
-                </a>
-                <button onclick="realizarLogout(); document.getElementById('mobile-menu').classList.add('hidden');" class="text-red-500 text-xs font-bold text-left flex items-center gap-2 py-1">
-                    <i class="fa-solid fa-power-off"></i> Sair da Conta
-                </button>
-            `;
-        } else {
-            wrapperMobile.innerHTML = `
-                <button onclick="abrirAuthModal('login'); document.getElementById('mobile-menu').classList.add('hidden');" class="text-xs font-bold text-gray-600 hover:text-eco-dark text-left py-1">Entre</button>
-                <button onclick="abrirAuthModal('cadastro'); document.getElementById('mobile-menu').classList.add('hidden');" class="text-xs font-bold text-orange-600 hover:text-orange-700 bg-orange-50 px-3 py-1.5 rounded-full text-center w-full">Cadastre-se</button>
-            `;
-        }
-    };
-    
-    atualizarInterfaceUsuario();
+            if (!inputNome || !inputPreco || !inputQtd) {
+                alert("Erro interno: Campos do formulário não localizados.");
+                return;
+            }
+
+            const dados = {
+                nome: inputNome.value.trim(),
+                preco: parseFloat(inputPreco.value),
+                quantidade: parseInt(inputQtd.value),
+                imagem: inputImg && inputImg.value.trim() !== "" ? inputImg.value.trim() : 'img/default.png'
+            };
+
+            try {
+                const resposta = await fetch('http://localhost:3000/api/admin/produtos', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(dados)
+                });
+                
+                const resultado = await resposta.json();
+                if (resultado.sucesso) {
+                    alert("🎉 Produto adicionado e salvo com sucesso!");
+                    formProdutoLoja.reset();
+                    carregarEstoqueDoBanco(); // Atualiza a vitrine dinamicamente
+                } else {
+                    alert("⚠️ Erro ao cadastrar produto: " + resultado.erro);
+                }
+            } catch (err) {
+                console.error("Erro na requisição:", err);
+                alert("❌ Falha ao conectar com o servidor. O backend está rodando?");
+            }
+        });
+    }
 });

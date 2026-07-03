@@ -97,7 +97,7 @@
         </section>
 
         <section class="container mx-auto px-4 py-12 max-w-6xl">
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div id="container-produtos" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 
                 <article class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow flex flex-col justify-between">
                     <div class="relative bg-gray-50 p-4 pt-6">
@@ -297,10 +297,46 @@
         </div>
     </div>
 
+    <div class="container mx-auto px-4 mt-8 mb-12 max-w-2xl">
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+            <h2 class="text-lg font-bold text-eco-dark mb-4 flex items-center gap-2">
+                <i class="fa-solid fa-box-open text-eco-light"></i> Adicionar Novo Produto na Vitrine
+            </h2>
+            
+            <form id="form-produto-loja-direto" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-gray-600 mb-1">Nome do Produto</label>
+                    <input type="text" id="prod-loja-nome" required class="w-full p-3 border border-gray-200 rounded-xl outline-none focus:border-eco-dark bg-gray-50 text-sm" placeholder="Ex: NVIDIA GTX 1660 Super 6GB">
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-600 mb-1">Preço (R$)</label>
+                        <input type="number" id="prod-loja-preco" step="0.01" required class="w-full p-3 border border-gray-200 rounded-xl outline-none focus:border-eco-dark bg-gray-50 text-sm" placeholder="Ex: 1200.00">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-600 mb-1">Quantidade em Estoque</label>
+                        <input type="number" id="prod-loja-qtd" required class="w-full p-3 border border-gray-200 rounded-xl outline-none focus:border-eco-dark bg-gray-50 text-sm" placeholder="Ex: 30">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-600 mb-1">Caminho ou URL da Imagem</label>
+                    <input type="text" id="prod-loja-img" class="w-full p-3 border border-gray-200 rounded-xl outline-none focus:border-eco-dark bg-gray-50 text-sm" placeholder="Ex: img/placa_video.png">
+                </div>
+
+                <button type="submit" class="w-full bg-eco-dark text-white py-3.5 rounded-xl font-bold hover:bg-eco-blue transition-colors text-sm shadow-md tracking-wide uppercase mt-2">
+                    Inserir Produto Agora
+                </button>
+            </form>
+        </div>
+    </div>
+
     <footer class="bg-eco-dark text-white/80 py-6 text-center mt-12">
         <p class="font-semibold text-white mb-1">EcoByte © 2026</p>
     </footer>
 
     <script src="../js/loja.js"></script>
+    <script src="../js/funciona.js"></script>
 </body>
 </html>

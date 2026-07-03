@@ -112,6 +112,32 @@ document.addEventListener("DOMContentLoaded", () => {
         attribution: '&copy; OpenStreetMap'
     }).addTo(map);
 
+    // FUNÇÃO PARA BUSCAR OS PONTOS DO BANCO DE DADOS (MYSQL)
+    async function carregarPontosDoBanco() {
+        try {
+            const resposta = await fetch('http://localhost:3000/api/pontos');
+            const dados = await resposta.json();
+            
+            if (resposta.ok && Array.isArray(dados)) {
+                // Mantém os 4 pontos fixos e adiciona os que vieram do banco de dados
+                dados.forEach(pontoBanco => {
+                    // Evita duplicar pontos se a função for chamada mais de uma vez
+                    if (!pontos.some(p => p.id === pontoBanco.id)) {
+                        pontos.push(pontoBanco);
+                    }
+                });
+            }
+            // Renderiza tudo junto (fixos + banco de dados)
+            renderizarPontos();
+        } catch (err) {
+            console.error("Erro ao carregar pontos do banco:", err);
+            // Se o servidor estiver desligado, renderiza pelo menos os fixos
+            renderizarPontos();
+        }
+    }
+
+    // Chama a função para buscar os dados salvos assim que a página carrega
+    carregarPontosDoBanco();
     // Renderiza os pontos na tela
     renderizarPontos();
 
@@ -154,17 +180,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 const dados = await resposta.json();
 
-                if (resposta.ok && dados.sucesso) {
+              if (resposta.ok && dados.sucesso) {
                     alert("🎉 Novo ponto de coleta cadastrado no banco de dados com sucesso!");
 
-                    // Adiciona na lista local para aparecer no site agora mesmo sem atualizar a página
+                    // Inclui o ID gerado pelo banco no objeto local antes de dar o push
+                    dadosPonto.id = dados.idInserido; 
+
                     pontos.push(dadosPonto);
                     renderizarPontos();
 
-                    // Foca o mapa no ponto novo criado
                     map.setView([lat, lng], 14);
                     pontoForm.reset();
-                } else {
+                }else {
                     alert(`⚠️ Erro no servidor: ${dados.mensagem || 'Falha ao salvar no banco.'}`);
                 }
             } catch (err) {
