@@ -99,3 +99,5 @@ WHERE nome IN (
     'Memória RAM HyperX Fury 8GB DDR4', 
     'Intel Core i5-10400F 2.9GHz'
 );
+USE ecobyte_db;
+ALTER TABLE produtos MODIFY COLUMN imagem LONGTEXT NULL;

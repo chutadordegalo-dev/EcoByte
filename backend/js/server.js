@@ -20,8 +20,9 @@ function criptografarCartao(dados) {
     return encrypted;
 }
 
-app.use(cors()); 
-app.use(express.json());
+// Substitua o app.use(express.json()); por este:
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
 // Conexão com o banco de dados MySQL
 const db = mysql.createPool({
