@@ -42,7 +42,9 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // ATUALIZADO: Evento ajustado para sincronizar com o banco de dados MySQL
+ // =========================================================
+    // EVENTO ATUALIZADO: AJUSTADO PARA BATER COM O SERVER.JS
+    // =========================================================
     formPerfil.addEventListener("submit", (e) => {
         e.preventDefault();
         const novoNome = inputUsername.value.trim();
@@ -60,7 +62,7 @@ document.addEventListener("DOMContentLoaded", () => {
             },
             body: JSON.stringify({
                 id_usuario: usuarioLogado.id, // Envia o ID numérico do banco
-                novo_nome: novoNome
+                nome: novoNome                 // <-- MUDADO DE 'novo_nome' PARA 'nome'
             })
         })
         .then(response => response.json())

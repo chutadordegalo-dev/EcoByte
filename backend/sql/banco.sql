@@ -99,5 +99,25 @@ WHERE nome IN (
     'Memória RAM HyperX Fury 8GB DDR4', 
     'Intel Core i5-10400F 2.9GHz'
 );
+-- Tabela para o Controle de Doações
+CREATE TABLE IF NOT EXISTS doacoes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_usuario INT,
+    item_doado VARCHAR(255) NOT NULL,
+    quantidade INT NOT NULL,
+    status VARCHAR(50) DEFAULT 'Pendente',
+    data_doacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_usuario) REFERENCES usuarios(id)
+);
+
+-- Tabela para a Classificação de Resíduos (Histórico de triagem)
+CREATE TABLE IF NOT EXISTS classificacao_residuos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_usuario INT,
+    material VARCHAR(255) NOT NULL,
+    tipo_classificacao ENUM('Reutilizável', 'Reciclável', 'Descarte') NOT NULL,
+    data_classificacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_usuario) REFERENCES usuarios(id)
+);
 USE ecobyte_db;
 ALTER TABLE produtos MODIFY COLUMN imagem LONGTEXT NULL;

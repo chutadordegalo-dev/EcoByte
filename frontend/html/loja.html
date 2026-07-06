@@ -335,6 +335,22 @@
                 <button type="submit" class="w-full bg-eco-dark text-white py-3.5 rounded-xl font-bold hover:bg-eco-blue transition-colors text-sm shadow-md tracking-wide uppercase mt-2">
                     Inserir Produto Agora
                 </button>
+                <hr class="my-6 border-gray-200">
+
+<div class="bg-red-50 p-5 rounded-2xl border border-red-100">
+    <h4 class="text-sm font-bold text-red-800 mb-3 flex items-center gap-1.5">
+        <i class="fa-solid fa-trash-can"></i> Excluir Produto do Estoque
+    </h4>
+    
+    <div class="mb-3">
+        <label for="delete-produto-nome" class="block text-xs font-bold text-gray-600 mb-1">Nome exato do Produto cadastrado</label>
+        <input type="text" id="delete-produto-nome" placeholder="Ex: Notebook Dell Antigo" class="w-full p-3 border border-gray-200 rounded-xl outline-none focus:border-red-500 bg-white text-sm">
+    </div>
+
+    <button type="button" id="btn-excluir-produto" class="w-full bg-red-600 text-white py-3 rounded-xl font-bold hover:bg-red-700 transition-colors text-sm shadow-md uppercase tracking-wide">
+        Excluir Produto Agora
+    </button>
+</div>
             </form>
         </div>
     </div>

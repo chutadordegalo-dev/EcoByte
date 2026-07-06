@@ -5,8 +5,7 @@ const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 require('dotenv').config();
 
-const app = express();
-const PORT = 3000;
+
 
 // Configuração da Criptografia para o Cartão de Crédito
 const ALGORITMO_CARTAO = 'aes-256-cbc';
@@ -20,7 +19,11 @@ function criptografarCartao(dados) {
     return encrypted;
 }
 
-// Substitua o app.use(express.json()); por este:
+const app = express();
+
+app.use(cors());
+const PORT = 3000;
+
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
@@ -225,6 +228,7 @@ app.get('/api/pontos', (req, res) => {
     });
 });
 
+
 // ==========================================
 // 5. ROTAS DE COLETA CORPORATIVA
 // ==========================================
@@ -235,6 +239,174 @@ app.post('/api/cotacao', (req, res) => {
     db.query(sql, [nome, email, contato, endereco, descricao], (err, result) => {
         if (err) return res.status(500).json({ sucesso: false, erro: err.message });
         res.json({ success: true, id: result.insertId });
+    });
+});
+
+// ROTA POST: CADASTRAR NOVO PONTO (Atualizada para aceitar o link do seu frontend)
+app.post('/api/pontos', (req, res) => {
+    const { nome, endereco, lat, lng } = req.body;
+
+    // Validação para não deixar salvar se faltar dados importantes
+    if (!nome || !endereco || lat === undefined || lng === undefined) {
+        return res.status(400).json({ sucesso: false, erro: "Todos os campos do ponto são obrigatórios." });
+    }
+
+    const sql = "INSERT INTO pontos_coleta (nome, endereco, lat, lng) VALUES (?, ?, ?, ?)";
+    
+    db.query(sql, [nome, endereco, lat, lng], (err, result) => {
+        if (err) {
+            console.error("❌ Erro ao inserir ponto no MySQL:", err.message);
+            return res.status(500).json({ sucesso: false, erro: "Erro ao salvar o ponto no banco de dados: " + err.message });
+        }
+        
+        console.log(`🎉 Novo ponto de coleta '${nome}' cadastrado com sucesso!`);
+        res.json({ 
+            sucesso: true, 
+            mensagem: "Novo ponto de coleta adicionado geograficamente!", 
+            idInserido: result.insertId 
+        });
+    });
+});
+app.delete('/api/pontos', (req, res) => {
+    const { nome } = req.body;
+
+    if (!nome) {
+        return res.status(400).json({ sucesso: false, erro: "Por favor, informe o nome do ponto que deseja excluir." });
+    }
+
+    const query = "DELETE FROM pontos_coleta WHERE nome = ?";
+
+    db.query(query, [nome], (err, resultado) => {
+        if (err) {
+            console.error("❌ Erro ao deletar ponto no MySQL:", err.message);
+            return res.status(500).json({ sucesso: false, erro: "Erro ao excluir o ponto no banco: " + err.message });
+        }
+
+        if (resultado.affectedRows === 0) {
+            return res.status(404).json({ sucesso: false, erro: "Nenhum ponto de coleta encontrado com esse nome exato." });
+        }
+
+        console.log(`🗑️ Ponto '${nome}' excluído com sucesso.`);
+        res.json({ sucesso: true, mensagem: "Ponto de coleta removido com sucesso!" });
+    });
+});
+// ROTA ADICIONADA: DELETAR PRODUTO PELO NOME
+app.delete('/api/admin/produtos', (req, res) => {
+    const { nome } = req.body;
+
+    if (!nome) {
+        return res.status(400).json({ sucesso: false, erro: "Por favor, informe o nome do produto que deseja excluir." });
+    }
+
+    const query = "DELETE FROM produtos WHERE nome = ?";
+
+    db.query(query, [nome], (err, resultado) => {
+        if (err) {
+            console.error("❌ Erro ao deletar produto no MySQL:", err.message);
+            return res.status(500).json({ sucesso: false, erro: "Erro ao excluir o produto no banco: " + err.message });
+        }
+
+        if (resultado.affectedRows === 0) {
+            return res.status(404).json({ sucesso: false, erro: "Nenhum produto foi localizado com esse nome exato." });
+        }
+
+        console.log(`🗑️ Produto '${nome}' excluído com sucesso do estoque.`);
+        res.json({ 
+            sucesso: true, 
+            mensagem: "Produto removido com sucesso do estoque!" 
+        });
+    });
+});
+// ROTA ATUALIZADA: ATUALIZAR NOME DO USUÁRIO (PERFIL COM VALIDAÇÃO AJUSTADA)
+app.put('/api/usuarios/atualizar-nome', (req, res) => {
+    // Tenta capturar o id tanto de 'id' quanto de 'id_usuario' enviado pelo frontend
+    const idParam = req.body.id || req.body.id_usuario;
+    const { nome } = req.body;
+
+    if (!idParam || !nome) {
+        return res.status(400).json({ 
+            sucesso: false, 
+            erro: `ID do usuário e novo nome são obrigatórios. Recebido id: ${idParam}, nome: ${nome}` 
+        });
+    }
+
+    const sql = "UPDATE usuarios SET nome = ? WHERE id = ?";
+
+    db.query(sql, [nome, idParam], (err, resultado) => {
+        if (err) {
+            console.error("❌ Erro ao atualizar nome no MySQL:", err.message);
+            return res.status(500).json({ sucesso: false, erro: "Erro ao atualizar dados no banco: " + err.message });
+        }
+
+        if (resultado.affectedRows === 0) {
+            return res.status(404).json({ sucesso: false, erro: "Usuário não encontrado com o ID fornecido." });
+        }
+
+        console.log(`✏️ Nome do usuário ID ${idParam} atualizado para '${nome}' com sucesso!`);
+        
+        res.json({ 
+            sucesso: true, 
+            mensagem: "Nome atualizado com sucesso!" 
+        });
+    });
+});
+// ==========================================
+// 6. ROTAS DE CLASSIFICAÇÃO E DOAÇÕES
+// ==========================================
+
+// Rota para salvar uma nova Classificação de Resíduo
+app.post('/api/residuos/classificar', (req, res) => {
+    const { id_usuario, material, tipo_classificacao } = req.body;
+
+    if (!material || !tipo_classificacao) {
+        return res.status(400).json({ sucesso: false, erro: "Campos obrigatórios ausentes." });
+    }
+
+    const sql = "INSERT INTO classificacao_residuos (id_usuario, material, tipo_classificacao) VALUES (?, ?, ?)";
+    db.query(sql, [id_usuario || null, material, tipo_classificacao], (err, result) => {
+        if (err) return res.status(500).json({ sucesso: false, erro: err.message });
+        res.json({ sucesso: true, mensagem: "Material classificado com sucesso!", id: result.insertId });
+    });
+});
+
+// Rota para registrar uma nova Doação
+app.post('/api/doacoes', (req, res) => {
+    const { id_usuario, item_doado, quantidade } = req.body;
+
+    if (!item_doado || !quantidade) {
+        return res.status(400).json({ sucesso: false, erro: "Por favor, preencha o item e a quantidade." });
+    }
+
+    const sql = "INSERT INTO doacoes (id_usuario, item_doado, quantidade) VALUES (?, ?, ?)";
+    db.query(sql, [id_usuario || null, item_doado, quantidade], (err, result) => {
+        if (err) return res.status(500).json({ sucesso: false, erro: err.message });
+        res.json({ sucesso: true, mensagem: "Doação registrada com sucesso!", id: result.insertId });
+    });
+});
+// Buscar últimas classificações registradas
+app.get('/api/residuos/classificar', (req, res) => {
+    const sql = "SELECT material, tipo_classificacao FROM classificacao_residuos ORDER BY id DESC LIMIT 5";
+    db.query(sql, (err, resultados) => {
+        if (err) return res.status(500).json({ sucesso: false, erro: err.message });
+        res.json(resultados);
+    });
+});
+
+// Buscar últimas doações registradas
+app.get('/api/doacoes', (req, res) => {
+    const sql = "SELECT item_doado, quantidade, status FROM doacoes ORDER BY id DESC LIMIT 5";
+    db.query(sql, (err, resultados) => {
+        if (err) return res.status(500).json({ sucesso: false, erro: err.message });
+        res.json(resultados);
+    });
+});
+
+// ROTA DO RANKING: Conta qual material aparece mais vezes no banco de dados
+app.get('/api/residuos/ranking', (req, res) => {
+    const sql = "SELECT material, COUNT(*) as total FROM classificacao_residuos GROUP BY material ORDER BY total DESC LIMIT 5";
+    db.query(sql, (err, resultados) => {
+        if (err) return res.status(500).json({ sucesso: false, erro: err.message });
+        res.json(resultados);
     });
 });
 

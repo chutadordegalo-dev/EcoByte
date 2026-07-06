@@ -383,4 +383,215 @@ if (cotacaoForm) {
             alert("❌ Erro de rede ao enviar solicitação.");
         }
     });
+    document.addEventListener('DOMContentLoaded', () => {
+    const formPonto = document.getElementById('pontoForm');
+    const btnExcluir = document.getElementById('btn-excluir-ponto');
+
+    // ==========================================
+    // 1. ROTA POST: CADASTRAR NOVO PONTO
+    // ==========================================
+    if (formPonto) {
+        formPonto.addEventListener('submit', async (e) => {
+            e.preventDefault(); // Impede a página de recarregar sozinha
+
+            // Captura os valores dos inputs do formulário
+            const dadosPonto = {
+                nome: document.getElementById('ponto-nome').value.trim(),
+                endereco: document.getElementById('ponto-endereco').value.trim(),
+                lat: parseFloat(document.getElementById('ponto-lat').value),
+                lng: parseFloat(document.getElementById('ponto-lng').value)
+            };
+
+            try {
+                // Envia os dados via POST para o seu servidor
+                const resposta = await fetch('http://localhost:3000/api/pontos', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(dadosPonto)
+                });
+
+                const resultado = await resposta.json();
+
+                if (resultado.sucesso) {
+                    alert("🎉 Novo ponto de coleta adicionado geograficamente!");
+                    formPonto.reset(); // Limpa os campos do formulário
+                    window.location.reload(); // Recarrega a página para atualizar o mapa Leaflet
+                } else {
+                    alert("⚠️ Erro do Servidor: " + resultado.erro);
+                }
+            } catch (err) {
+                console.error("Erro ao cadastrar ponto:", err);
+                alert("❌ Falha ao conectar com o servidor. O backend está rodando?");
+            }
+        });
+    }
+
+    // ==========================================
+    // 2. ROTA DELETE: EXCLUIR PONTO EXISTENTE
+    // ==========================================
+    if (btnExcluir) {
+        btnExcluir.addEventListener('click', async () => {
+            const inputNome = document.getElementById('delete-ponto-nome');
+            const nomePonto = inputNome ? inputNome.value.trim() : "";
+
+            if (!nomePonto) {
+                alert("⚠️ Por favor, digite o nome do ponto que deseja excluir.");
+                return;
+            }
+
+            const confirmar = confirm(`Tem certeza que deseja deletar permanentemente o ponto "${nomePonto}"?`);
+            if (!confirmar) return;
+
+            try {
+                // Envia o pedido de exclusão via DELETE para o seu servidor
+                const resposta = await fetch('http://localhost:3000/api/pontos', {
+                    method: 'DELETE',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ nome: nomePonto })
+                });
+
+                const resultado = await resposta.json();
+
+                if (resultado.sucesso) {
+                    alert("🗑️ Ponto de coleta removido com sucesso!");
+                    if (inputNome) inputNome.value = ""; // Limpa o campo de texto
+                    window.location.reload(); // Recarrega a página para atualizar o mapa
+                } else {
+                    alert("⚠️ Erro do Servidor: " + resultado.erro);
+                }
+            } catch (err) {
+                console.error("Erro ao excluir ponto:", err);
+                alert("❌ Falha ao conectar com o servidor.");
+            }
+        });
+    }
+});
+// ==========================================
+    // LOGICA DE CLASSIFICAÇÃO DE RESÍDUOS
+    // ==========================================
+    const formClassificacao = document.getElementById('form-classificacao');
+    if (formClassificacao) {
+        formClassificacao.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const sessao = JSON.parse(localStorage.getItem('ecobyte_sessao'));
+            const dados = {
+                id_usuario: sessao ? sessao.id : null,
+                material: document.getElementById('classificar-material').value.trim(),
+                tipo_classificacao: document.getElementById('classificar-tipo').value
+            };
+
+            try {
+                const resposta = await fetch('http://localhost:3000/api/residuos/classificar', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(dados)
+                });
+                const resultado = await resposta.json();
+
+                if (resultado.sucesso) {
+                    alert(`✅ Material cadastrado! Categoria definida: ${dados.tipo_classificacao}`);
+                    formClassificacao.reset();
+                } else {
+                    alert("⚠️ Erro ao classificar: " + resultado.erro);
+                }
+            } catch (err) {
+                console.error(err);
+                alert("❌ Erro de conexão com o servidor.");
+            }
+        });
+    }
+
+    // ==========================================
+    // LOGICA DE CONTROLE DE DOAÇÕES
+    // ==========================================
+    const formDoacao = document.getElementById('form-doacao');
+    if (formDoacao) {
+        formDoacao.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const sessao = JSON.parse(localStorage.getItem('ecobyte_sessao'));
+            const dados = {
+                id_usuario: sessao ? sessao.id : null,
+                item_doado: document.getElementById('doacao-item').value.trim(),
+                quantidade: parseInt(document.getElementById('doacao-qtd').value)
+            };
+
+            try {
+                const resposta = await fetch('http://localhost:3000/api/doacoes', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(dados)
+                });
+                const resultado = await resposta.json();
+
+                if (resultado.sucesso) {
+                    alert("💝 Obrigado! Sua intenção de doação foi registrada com sucesso.");
+                    formDoacao.reset();
+                } else {
+                    alert("⚠️ Erro ao registrar doação: " + resultado.erro);
+                }
+            } catch (err) {
+                console.error(err);
+                alert("❌ Erro de conexão com o servidor.");
+            }
+        });
+    }
+    // ==========================================
+    // FUNÇÃO PARA CARREGAR TODAS AS TABELAS
+    // ==========================================
+    async function carregarTabelasIniciais() {
+        try {
+            // 1. Carregar Classificações
+            const resClassif = await fetch('http://localhost:3000/api/residuos/classificar');
+            const dadosClassif = await resClassif.json();
+            const bodyClassif = document.getElementById('tabela-classificacoes-body');
+            if(bodyClassif && Array.isArray(dadosClassif)) {
+                bodyClassif.innerHTML = dadosClassif.length === 0 ? '<tr><td colspan="2" class="py-3 text-center text-gray-400">Nenhum registro.</td></tr>' : 
+                dadosClassif.map(c => `
+                    <tr>
+                        <td class="py-2.5 font-medium">${c.material}</td>
+                        <td class="py-2.5 text-right font-bold ${c.tipo_classificacao === 'Reutilizável' ? 'text-blue-600' : c.tipo_classificacao === 'Reciclável' ? 'text-green-600' : 'text-red-500'}">${c.tipo_classificacao}</td>
+                    </tr>
+                `).join('');
+            }
+
+            // 2. Carregar Doações
+            const resDoacoes = await fetch('http://localhost:3000/api/doacoes');
+            const dadosDoacoes = await resDoacoes.json();
+            const bodyDoacoes = document.getElementById('tabela-doacoes-body');
+            if(bodyDoacoes && Array.isArray(dadosDoacoes)) {
+                bodyDoacoes.innerHTML = dadosDoacoes.length === 0 ? '<tr><td colspan="3" class="py-3 text-center text-gray-400">Nenhuma doação.</td></tr>' : 
+                dadosDoacoes.map(d => `
+                    <tr>
+                        <td class="py-2.5 font-medium">${d.item_doado}</td>
+                        <td class="py-2.5 text-center">${d.quantidade}</td>
+                        <td class="py-2.5 text-right"><span class="px-2 py-0.5 bg-gray-100 rounded-full text-[10px] font-bold text-gray-600">${d.status}</span></td>
+                    </tr>
+                `).join('');
+            }
+
+            // 3. Carregar Ranking de Mais Classificados
+            const resRanking = await fetch('http://localhost:3000/api/residuos/ranking');
+            const dadosRanking = await resRanking.json();
+            const bodyRanking = document.getElementById('tabela-ranking-body');
+            if(bodyRanking && Array.isArray(dadosRanking)) {
+                bodyRanking.innerHTML = dadosRanking.length === 0 ? '<tr><td colspan="2" class="py-3 text-center text-gray-400">Nenhum ranking.</td></tr>' : 
+                dadosRanking.map((r, index) => `
+                    <tr>
+                        <td class="py-2.5 font-medium flex items-center gap-1.5">
+                            <span class="font-bold text-gray-400">#${index + 1}</span> ${r.material}
+                        </td>
+                        <td class="py-2.5 text-right font-bold text-amber-600">${r.total}x</td>
+                    </tr>
+                `).join('');
+            }
+
+        } catch (error) {
+            console.error("Erro ao carregar tabelas do painel ecológico:", error);
+        }
+    }
+
+    // Executa a carga das tabelas assim que a página abrir
+    carregarTabelasIniciais();
 }

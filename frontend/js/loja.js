@@ -651,4 +651,81 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+    // Evento para excluir um Ponto de Coleta pelo Nome
+const btnExcluir = document.getElementById('btn-excluir-ponto');
+if (btnExcluir) {
+    btnExcluir.addEventListener('click', async () => {
+        const nomePonto = document.getElementById('delete-ponto-nome').value.trim();
+
+        if (!nomePonto) {
+            alert("⚠️ Por favor, digite o nome do ponto que deseja excluir.");
+            return;
+        }
+
+        if (!confirm(`Tem certeza que deseja deletar permanentemente o ponto "${nomePonto}"?`)) {
+            return;
+        }
+
+        try {
+            const resposta = await fetch('http://localhost:3000/api/admin/pontos', {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ nome: nomePonto })
+            });
+
+            const resultado = await resposta.json();
+
+            if (resultado.sucesso) {
+                alert("🗑️ Ponto de coleta removido do mapa!");
+                document.getElementById('delete-ponto-nome').value = "";
+                window.location.reload(); // Recarrega a página para atualizar o mapa Leaflet automaticamente
+            } else {
+                alert("⚠️ Erro: " + resultado.erro);
+            }
+        } catch (err) {
+            console.error(err);
+            alert("❌ Falha ao conectar com o servidor backend.");
+        }
+    });
+}
+// ==========================================
+// EVENTO PARA EXCLUIR PRODUTO DA LOJA
+// ==========================================
+const btnExcluirProduto = document.getElementById('btn-excluir-produto');
+
+if (btnExcluirProduto) {
+    btnExcluirProduto.addEventListener('click', async () => {
+        const inputNome = document.getElementById('delete-produto-nome');
+        const nomeProduto = inputNome ? inputNome.value.trim() : "";
+
+        if (!nomeProduto) {
+            alert("⚠️ Por favor, digite o nome do produto que deseja excluir.");
+            return;
+        }
+
+        const confirmar = confirm(`Tem certeza que deseja deletar permanentemente o produto "${nomeProduto}" do estoque?`);
+        if (!confirmar) return;
+
+        try {
+            const resposta = await fetch('http://localhost:3000/api/admin/produtos', {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ nome: nomeProduto })
+            });
+
+            const resultado = await resposta.json();
+
+            if (resultado.sucesso) {
+                alert("🗑️ Produto removido do estoque com sucesso!");
+                if (inputNome) inputNome.value = "";
+                window.location.reload(); // Recarrega a vitrine da loja atualizada
+            } else {
+                alert("⚠️ Erro do Servidor: " + resultado.erro);
+            }
+        } catch (err) {
+            console.error("Erro ao excluir produto:", err);
+            alert("❌ Falha ao conectar com o servidor.");
+        }
+    });
+}
 });
