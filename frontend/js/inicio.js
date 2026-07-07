@@ -591,6 +591,7 @@ if (cotacaoForm) {
             console.error("Erro ao carregar tabelas do painel ecológico:", error);
         }
     }
+    
 
     // Executa a carga das tabelas assim que a página abrir
     carregarTabelasIniciais();
