@@ -119,5 +119,6 @@ CREATE TABLE IF NOT EXISTS classificacao_residuos (
     data_classificacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (id_usuario) REFERENCES usuarios(id)
 );
+
 USE ecobyte_db;
 ALTER TABLE produtos MODIFY COLUMN imagem LONGTEXT NULL;

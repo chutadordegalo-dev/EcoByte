@@ -23,6 +23,66 @@
 </head>
 <body class="bg-eco-bg text-gray-800">
 
+    <div id="trava-seguranca" class="fixed inset-0 bg-eco-dark z-[9999] flex items-center justify-center p-4">
+        <div class="bg-white p-8 rounded-2xl shadow-2xl max-w-sm w-full text-center">
+            <div class="text-eco-dark text-4xl mb-4">
+                <i class="fa-solid fa-lock"></i>
+            </div>
+            <h2 class="text-xl font-bold text-gray-800 mb-2">Acesso Restrito</h2>
+            <p class="text-gray-500 text-xs mb-6">Insira as credenciais de segurança para liberar o painel.</p>
+            
+            <form id="form-trava" class="space-y-4 text-left">
+                <div>
+                    <label class="block text-xs font-bold text-gray-600 mb-1">Palavra-Chave</label>
+                    <input type="text" id="trava-chave" required placeholder="Digite a palavra-chave" class="w-full p-3 border border-gray-200 rounded-xl outline-none focus:border-eco-dark text-sm bg-gray-50">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-600 mb-1">Senha de Admin</label>
+                    <input type="password" id="trava-senha" required placeholder="Digite a senha" class="w-full p-3 border border-gray-200 rounded-xl outline-none focus:border-eco-dark text-sm bg-gray-50">
+                </div>
+                <button type="submit" class="w-full bg-eco-dark text-white py-3 rounded-xl font-bold hover:bg-eco-blue transition-colors text-sm shadow-md uppercase tracking-wide mt-2">
+                    Desbloquear Painel
+                </button>
+            </form>
+            <p id="trava-erro" class="text-red-600 text-xs font-bold mt-3 hidden">Credenciais incorretas!</p>
+        </div>
+    </div>
+
+    <div id="conteudo-admin" class="hidden">
+        
+        ```
+
+---
+
+`</body>`
+
+    </div> <script>
+        document.getElementById('form-trava').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const chaveDigitada = document.getElementById('trava-chave').value;
+            const senhaDigitada = document.getElementById('trava-senha').value;
+            const erroMsg = document.getElementById('trava-erro');
+
+            // DEFINA AQUI SUA PALAVRA-CHAVE E SENHA DIRETAS
+            const PALAVRA_CHAVE_CORRETA = "caio"; 
+            const SENHA_CORRETA = "caio";
+
+            if (chaveDigitada === PALAVRA_CHAVE_CORRETA && senhaDigitada === SENHA_CORRETA) {
+                // Esconde a tela de bloqueio e mostra o painel do admin
+                document.getElementById('trava-seguranca').classList.add('hidden');
+                document.getElementById('conteudo-admin').classList.remove('hidden');
+            } else {
+                // Mostra mensagem de erro
+                erroMsg.classList.remove('hidden');
+                document.getElementById('trava-senha').value = ''; // Limpa a senha
+            }
+        });
+    </script>
+</body>
+</html>
+<body class="bg-eco-bg text-gray-800">
+
     <header class="fixed w-full top-0 z-50 bg-white shadow-sm transition-all duration-300" id="navbar">
         <div class="container mx-auto px-4 py-3 flex justify-between items-center">
             <a href="#" class="flex items-center gap-3 group">
@@ -340,9 +400,9 @@
     <script src="../js/loja.js"></script>
     <script src="../js/funciona.js"></script>
 
-    
+    <script src="../js/inicio.js"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   
-  <script src="../js/inicio.js"></script>
+
 </body>
 </html>
