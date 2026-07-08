@@ -122,3 +122,12 @@ CREATE TABLE IF NOT EXISTS classificacao_residuos (
 
 USE ecobyte_db;
 ALTER TABLE produtos MODIFY COLUMN imagem LONGTEXT NULL;
+CREATE TABLE IF NOT EXISTS cotacoes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    contato VARCHAR(50) NOT NULL,
+    endereco VARCHAR(255) NOT NULL,
+    descricao TEXT NOT NULL,
+    data_criacao DATETIME NOT NULL
+);

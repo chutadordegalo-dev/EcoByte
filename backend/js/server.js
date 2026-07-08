@@ -229,16 +229,43 @@ app.get('/api/pontos', (req, res) => {
 });
 
 
-// ==========================================
-// 5. ROTAS DE COLETA CORPORATIVA
-// ==========================================
-
+/// ========================================================
+// ROTA POST: SALVAR SOLICITAÇÃO DE COLETA CORPORATIVA (COTAÇÃO)
+// ========================================================
 app.post('/api/cotacao', (req, res) => {
     const { nome, email, contato, endereco, descricao } = req.body;
-    const sql = "INSERT INTO coletas_corporativas (nome, email, contato, endereco, descricao) VALUES (?, ?, ?, ?, ?)";
-    db.query(sql, [nome, email, contato, endereco, descricao], (err, result) => {
-        if (err) return res.status(500).json({ sucesso: false, erro: err.message });
-        res.json({ success: true, id: result.insertId });
+
+    // Validação básica para garantir que nenhum campo essencial vá vazio
+    if (!nome || !email || !contato || !endereco || !descricao) {
+        return res.status(400).json({ 
+            sucesso: false, 
+            erro: "Por favor, preencha todos os campos do formulário." 
+        });
+    }
+
+    // Query SQL para inserir a cotação no seu banco de dados
+    // Nota: Certifique-se de que o nome da sua tabela seja 'cotacoes' ou altere abaixo
+    const querySQL = `
+        INSERT INTO cotacoes (nome, email, contato, endereco, descricao, data_criacao) 
+        VALUES (?, ?, ?, ?, ?, NOW())
+    `;
+
+    // Executa a query utilizando a sua conexão do banco (geralmente chamada de db, conexao ou pool)
+    db.query(querySQL, [nome, email, contato, endereco, descricao], (err, resultado) => {
+        if (err) {
+            console.error("Erro ao salvar cotação no MySQL:", err);
+            return res.status(500).json({ 
+                sucesso: false, 
+                erro: "Erro interno ao salvar no banco de dados." 
+            });
+        }
+
+        // Retorna sucesso para o seu script do frontend (resposta.ok será verdadeiro)
+        return res.status(200).json({ 
+            sucesso: true, 
+            mensagem: "Cotação registrada com sucesso!",
+            id: resultado.insertId 
+        });
     });
 });
 

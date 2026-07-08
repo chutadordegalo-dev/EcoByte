@@ -28,196 +28,137 @@
         }
     </script>
 </head>
-<body class="bg-eco-bg text-gray-800 font-sans flex flex-col min-h-screen">
-
-    <header class="fixed w-full top-0 z-50 bg-white shadow-sm transition-all duration-300">
+<body>
+      <header class="fixed w-full top-0 z-50 bg-white shadow-sm transition-all duration-300">
         <div class="container mx-auto px-4 py-3 flex justify-between items-center">
-            <a href="inicio.html" class="flex items-center gap-3 group">
-                <img src="img/logoo.png" alt="Logo EcoByte" class="h-14 w-auto onerror-fallback">
+            <a href="../html/inicio.html" class="flex items-center gap-3">
+                <img src="../img/logoo.png" alt="Logo EcoByte" class="h-14 w-auto">
                 <span class="text-2xl font-bold text-eco-dark tracking-tight">EcoByte</span>
             </a>
             
-            <nav class="hidden md:flex items-center gap-6 text-sm font-semibold">
-                <a href="inicio.html" class="text-gray-600 hover:text-eco-dark transition-colors">Início</a>
-                <a href="portifolio.html" class="text-gray-600 hover:text-eco-dark transition-colors">Portfólio</a>
-                <a href="loja.html" class="text-gray-600 hover:text-eco-dark transition-colors">Loja</a>
-                <a href="parceiros.html" class="text-eco-dark border-b-2 border-eco-dark pb-1 transition-colors">Parceiros</a>
-            </nav>
-
-            <div class="flex items-center gap-4">
-                <a href="perfil.html" class="hidden md:flex items-center gap-2 hover:opacity-80 transition-opacity">
-                    <div class="w-8 h-8 bg-eco-dark text-white rounded-full flex items-center justify-center font-bold text-sm">
-                        <i class="fa-solid fa-user text-xs"></i>
-                    </div>
-                </a>
-                <button id="btn-mobile-menu-parceiros" class="md:hidden text-2xl text-eco-dark focus:outline-none">
-                    <i class="fa-solid fa-bars"></i>
-                </button>
-            </div>
-        </div>
-
-        <div id="mobile-menu-parceiros" class="hidden md:hidden bg-white border-t border-gray-100 px-4 py-3 space-y-3 shadow-lg">
-            <a href="inicio.html" class="block text-sm font-semibold text-gray-600 py-1">Início</a>
-            <a href="portifolio.html" class="block text-sm font-semibold text-gray-600 py-1">Portfólio</a>
-            <a href="loja.html" class="block text-sm font-semibold text-gray-600 py-1">Loja</a>
-            <a href="parceiros.html" class="block text-sm font-semibold text-eco-dark py-1">Parceiros</a>
-            <a href="perfil.html" class="block text-sm font-semibold text-gray-600 py-1 border-t pt-2"><i class="fa-solid fa-user mr-2"></i>Meu Perfil</a>
-        </div>
-    </header>
-
-    <main class="flex-grow pt-28 pb-16">
-        <div class="container mx-auto px-4 max-w-5xl">
+            <button id="menu-btn-portfolio" class="md:hidden text-eco-dark p-2 text-2xl focus:outline-none">
+                <i class="fa-solid fa-bars"></i>
+            </button>
             
+            <nav class="hidden md:flex items-center gap-6 font-medium text-gray-600">
+                <a href="../html/inicio.html" class="hover:text-eco-dark transition-colors">Home</a>
+                <a href="../html/loja.html" class="hover:text-eco-dark transition-colors">Loja</a>
+                <a href="#parceiros" class="hover:text-eco-dark transition-colors">Parceiros</a>
+                <a href="../html/perfil.html" class="hover:text-eco-dark transition-colors">Perfil</a>
+            </nav>
+        </div>
+
+        <nav id="mobile-menu-portfolio" class="hidden md:hidden bg-white border-t border-gray-100 px-4 py-4 space-y-4 shadow-lg flex flex-col font-medium text-gray-600">
+            <a href="../html/inicio.html" class="portfolio-link hover:text-eco-dark transition-colors py-1">Home</a>
+            <a href="../html/loja.html" class="portfolio-link hover:text-eco-dark transition-colors py-1">Loja</a>
+            <a href="#parceiros" class="portfolio-link hover:text-eco-dark transition-colors py-1">Parceiros</a>
+            <a href="../html/perfil.html" class="portfolio-link hover:text-eco-dark transition-colors py-1">Perfil</a>
+        </nav>
+    </header>
+       <section id="parceiros" class="container mx-auto px-4 py-12 max-w-6xl scroll-mt-24">
             <div class="text-center mb-12">
-                <span class="text-xs font-bold text-eco-blue uppercase tracking-widest bg-blue-50 px-3 py-1 rounded-full">Rede Colaborativa</span>
-                <h1 class="text-3xl md:text-4xl font-bold text-eco-dark mt-3">Nossos Parceiros Estratégicos</h1>
+                <span class="text-xs font-bold text-eco-blue uppercase tracking-widest bg-eco-blue/10 px-3 py-1 rounded-full">Rede Colaborativa</span>
+                <h2 class="text-3xl font-bold text-eco-dark mt-3">Nossos Parceiros de Confiança</h2>
                 <p class="text-gray-500 text-sm max-w-xl mx-auto mt-2">
-                    Trabalhamos em conjunto com instituições públicas e grandes empresas para transformar o descarte de resíduos eletrônicos em impacto sustentável real.
+                    Instituições de peso e marcas focadas no futuro que caminham de mãos dadas com a EcoByte.
                 </p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 
-                <article class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden flex flex-col hover:shadow-md transition-shadow">
-                    <div class="h-48 overflow-hidden bg-gray-100 relative">
-                        <img src="https://images.unsplash.com/photo-1541872703-74c5e44368f9?auto=format&fit=crop&w=800&q=80" alt="Prefeitura de Contagem" class="w-full h-full object-cover">
-                        <div class="absolute top-4 left-4 bg-white/95 backdrop-blur-xs text-eco-dark font-bold text-xs px-3 py-1.5 rounded-lg shadow-xs flex items-center gap-1.5">
-                            <i class="fa-solid fa-building-flag text-orange-500"></i> Setor Público
+                <article class="bg-white rounded-2xl border border-gray-100 shadow-md overflow-hidden flex flex-col justify-between">
+                    <div>
+                        <img src="https://images.unsplash.com/photo-1573164713988-8665fc963095?auto=format&fit=crop&w=800&q=80" alt="Vista aérea da região industrial de Contagem" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold text-eco-dark">Prefeitura de Contagem</h3>
+                            <p class="text-xs text-gray-400 font-semibold uppercase mt-1">Parceiro Governamental</p>
+                            <p class="text-gray-600 text-sm mt-3 leading-relaxed">
+                                Atua em conjunto na expansão de ecopontos em praças públicas e no suporte de campanhas de conscientização ecológica nas escolas municipais de Contagem.
+                            </p>
                         </div>
                     </div>
-                    <div class="p-6 flex-grow flex flex-col justify-between space-y-4">
-                        <div>
-                            <h2 class="text-xl font-bold text-eco-dark">Prefeitura de Contagem</h2>
-                            <p class="text-xs text-gray-400 mt-0.5">Parceria em Logística Reversa Urbana</p>
-                            <p class="text-gray-600 text-xs mt-3 leading-relaxed">
-                                Apoio oficial na implementação e divulgação de ecopontos estratégicos de coleta por toda a cidade de Contagem, facilitando o descarte correto de sucatas de computadores e componentes eletrônicos pela população.
-                            </p>
-                        </div>
-                        <div class="bg-emerald-50/60 border border-emerald-100 p-3.5 rounded-xl">
-                            <p class="text-[11px] italic text-emerald-800 leading-relaxed">
+                    <div class="p-6 pt-0">
+                        <div class="bg-emerald-50 border border-emerald-100 p-4 rounded-xl">
+                            <p class="text-xs italic text-emerald-800">
                                 <i class="fa-solid fa-quote-left mr-1 opacity-70"></i>
-                                A iniciativa da EcoByte trouxe para Contagem uma solução limpa, profissional e extremamente necessária para a destinação do lixo eletrônico. Um orgulho para o município!
+                                A EcoByte trouxe para nossa cidade uma solução moderna e limpa para o descarte tecnológico. Um projeto indispensável!
                                 <i class="fa-solid fa-quote-right ml-1 opacity-70"></i>
                             </p>
-                            <span class="block text-[10px] font-bold text-emerald-700 mt-2 text-right">— Secretaria de Meio Ambiente e Desenvolvimento</span>
+                            <span class="block text-[10px] font-bold text-emerald-700 mt-2 text-right">— Secretaria de Meio Ambiente</span>
                         </div>
                     </div>
                 </article>
 
-                <article class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden flex flex-col hover:shadow-md transition-shadow">
-                    <div class="h-48 overflow-hidden bg-gray-100 relative">
-                        <img src="https://images.unsplash.com/photo-1570129477492-45c003edd2be?auto=format&fit=crop&w=800&q=80" alt="Prefeitura de Belo Horizonte" class="w-full h-full object-cover">
-                        <div class="absolute top-4 left-4 bg-white/95 backdrop-blur-xs text-eco-dark font-bold text-xs px-3 py-1.5 rounded-lg shadow-xs flex items-center gap-1.5">
-                            <i class="fa-solid fa-building-flag text-orange-500"></i> Setor Público
+                <article class="bg-white rounded-2xl border border-gray-100 shadow-md overflow-hidden flex flex-col justify-between">
+                    <div>
+                        <img src="https://images.unsplash.com/photo-1449034446853-66c86144b0ad?auto=format&fit=crop&w=800&q=80" alt="Vista aérea de Belo Horizonte" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold text-eco-dark">Prefeitura de Belo Horizonte</h3>
+                            <p class="text-xs text-gray-400 font-semibold uppercase mt-1">Inclusão e Sustentabilidade</p>
+                            <p class="text-gray-600 text-sm mt-3 leading-relaxed">
+                                Apoio técnico no recolhimento de computadores antigos da rede pública e fomento do reaproveitamento de componentes para inclusão digital.
+                            </p>
                         </div>
                     </div>
-                    <div class="p-6 flex-grow flex flex-col justify-between space-y-4">
-                        <div>
-                            <h2 class="text-xl font-bold text-eco-dark">Prefeitura de Belo Horizonte</h2>
-                            <p class="text-xs text-gray-400 mt-0.5">Inclusão Digital e Descarte Inteligente</p>
-                            <p class="text-gray-600 text-xs mt-3 leading-relaxed">
-                                Acordo de cooperação técnica focado na remanufatura de computadores descartados. As peças coletadas e recuperadas pela EcoByte abastecem salas de informática de escolas e centros comunitários da capital.
-                            </p>
-                        </div>
-                        <div class="bg-emerald-50/60 border border-emerald-100 p-3.5 rounded-xl">
-                            <p class="text-[11px] italic text-emerald-800 leading-relaxed">
+                    <div class="p-6 pt-0">
+                        <div class="bg-emerald-50 border border-emerald-100 p-4 rounded-xl">
+                            <p class="text-xs italic text-emerald-800">
                                 <i class="fa-solid fa-quote-left mr-1 opacity-70"></i>
-                                Além do ganho ecológico na destinação de resíduos, a parceria viabiliza inclusão digital direta de jovens da periferia com equipamentos revitalizados. Trabalho impecável.
+                                Parceria fantástica que une a preservação da natureza com a tecnologia para quem mais precisa nas nossas comunidades.
                                 <i class="fa-solid fa-quote-right ml-1 opacity-70"></i>
                             </p>
-                            <span class="block text-[10px] font-bold text-emerald-700 mt-2 text-right">— Coordenação de Inclusão e Tecnologia Digital</span>
+                            <span class="block text-[10px] font-bold text-emerald-700 mt-2 text-right">— Coordenação de Inclusão Digital</span>
                         </div>
                     </div>
                 </article>
 
-                <article class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden flex flex-col hover:shadow-md transition-shadow">
-                    <div class="h-48 overflow-hidden bg-gray-100 relative">
-                        <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=800&q=80" alt="TechGreen Solutions" class="w-full h-full object-cover">
-                        <div class="absolute top-4 left-4 bg-white/95 backdrop-blur-xs text-eco-dark font-bold text-xs px-3 py-1.5 rounded-lg shadow-xs flex items-center gap-1.5">
-                            <i class="fa-solid fa-leaf text-emerald-600"></i> Corporativo Privado
+                <article class="bg-white rounded-2xl border border-gray-100 shadow-md overflow-hidden flex flex-col justify-between">
+                    <div>
+                        <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=800&q=80" alt="TechGreen Solutions" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold text-eco-dark">TechGreen Solutions</h3>
+                            <p class="text-xs text-gray-400 font-semibold uppercase mt-1">Especialistas Ambientais</p>
+                            <p class="text-gray-600 text-sm mt-3 leading-relaxed">
+                                Empresa de consultoria verde que atua na triagem fina e reaproveitamento seguro de minerais nobres das placas eletrônicas antigas.
+                            </p>
                         </div>
                     </div>
-                    <div class="p-6 flex-grow flex flex-col justify-between space-y-4">
-                        <div>
-                            <h2 class="text-xl font-bold text-eco-dark">TechGreen Solutions</h2>
-                            <p class="text-xs text-gray-400 mt-0.5">Destinação de Hardware e Logística</p>
-                            <p class="text-gray-600 text-xs mt-3 leading-relaxed">
-                                Empresa líder em consultoria ambiental que atua em conjunto com a EcoByte fornecendo triagem especializada para a separação de metais nobres e insumos valiosos contidos em placas de circuito impresso antigos.
-                            </p>
-                        </div>
-                        <div class="bg-emerald-50/60 border border-emerald-100 p-3.5 rounded-xl">
-                            <p class="text-[11px] italic text-emerald-800 leading-relaxed">
+                    <div class="p-6 pt-0">
+                        <div class="bg-emerald-50 border border-emerald-100 p-4 rounded-xl">
+                            <p class="text-xs italic text-emerald-800">
                                 <i class="fa-solid fa-quote-left mr-1 opacity-70"></i>
-                                Encontramos na EcoByte o parceiro ideal para fechar o ciclo de responsabilidade ESG. A transparência nos relatórios de triagem e destinação final é o ponto forte.
+                                Encontramos na EcoByte a seriedade e os certificados ideais para cumprir nossas metas mais exigentes de ESG corporativo.
                                 <i class="fa-solid fa-quote-right ml-1 opacity-70"></i>
                             </p>
-                            <span class="block text-[10px] font-bold text-emerald-700 mt-2 text-right">— Diretoria de Operações Sustentáveis</span>
+                            <span class="block text-[10px] font-bold text-emerald-700 mt-2 text-right">— Diretoria Operacional</span>
                         </div>
                     </div>
                 </article>
 
-                <article class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden flex flex-col hover:shadow-md transition-shadow">
-                    <div class="h-48 overflow-hidden bg-gray-100 relative">
-                        <img src="https://images.unsplash.com/photo-1605810230434-7631ac76ec81?auto=format&fit=crop&w=800&q=80" alt="Minas Recicla Hardware" class="w-full h-full object-cover">
-                        <div class="absolute top-4 left-4 bg-white/95 backdrop-blur-xs text-eco-dark font-bold text-xs px-3 py-1.5 rounded-lg shadow-xs flex items-center gap-1.5">
-                            <i class="fa-solid fa-leaf text-emerald-600"></i> Corporativo Privado
+                <article class="bg-white rounded-2xl border border-gray-100 shadow-md overflow-hidden flex flex-col justify-between">
+                    <div>
+                        <img src="https://images.unsplash.com/photo-1605810230434-7631ac76ec81?auto=format&fit=crop&w=800&q=80" alt="Minas Hardware Recicla" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold text-eco-dark">Minas Hardware Recicla</h3>
+                            <p class="text-xs text-gray-400 font-semibold uppercase mt-1">Processamento de Resíduos</p>
+                            <p class="text-gray-600 text-sm mt-3 leading-relaxed">
+                                Usina de trituração industrial de grande porte parceira que garante que os plásticos e carcaças restantes virem novos insumos industriais.
+                            </p>
                         </div>
                     </div>
-                    <div class="p-6 flex-grow flex flex-col justify-between space-y-4">
-                        <div>
-                            <h2 class="text-xl font-bold text-eco-dark">Minas Recicla Hardware</h2>
-                            <p class="text-xs text-gray-400 mt-0.5">Processamento Industrial de Resíduos</p>
-                            <p class="text-gray-600 text-xs mt-3 leading-relaxed">
-                                Usina especializada na trituração e descaracterização segura e em grande escala de carcaças plásticas e ligas metálicas, garantindo que nenhum resíduo não aproveitado termine em aterros convencionais.
-                            </p>
-                        </div>
-                        <div class="bg-emerald-50/60 border border-emerald-100 p-3.5 rounded-xl">
-                            <p class="text-[11px] italic text-emerald-800 leading-relaxed">
+                    <div class="p-6 pt-0">
+                        <div class="bg-emerald-50 border border-emerald-100 p-4 rounded-xl">
+                            <p class="text-xs italic text-emerald-800">
                                 <i class="fa-solid fa-quote-left mr-1 opacity-70"></i>
-                                Operação ágil e compromisso admirável. A equipe técnica da EcoByte entende profundamente as regras da PNRS (Política Nacional de Resíduos Sólidos). Nota dez!
+                                Agilidade e compromisso técnico impecáveis. A equipe domina todas as diretrizes ambientais nacionais de descarte. Nota dez!
                                 <i class="fa-solid fa-quote-right ml-1 opacity-70"></i>
                             </p>
-                            <span class="block text-[10px] font-bold text-emerald-700 mt-2 text-right">— Gerência de Logística e Meio Ambiente</span>
+                            <span class="block text-[10px] font-bold text-emerald-700 mt-2 text-right">— Gerência de Logística</span>
                         </div>
                     </div>
                 </article>
 
             </div>
-
-        </div>
-    </main>
-
-    <footer class="bg-eco-dark text-white/80 py-8 border-t border-white/10 text-center">
-        <div class="container mx-auto px-4">
-            <p class="font-semibold text-white mb-1">EcoByte © 2026</p>
-            <p class="text-xs">Trabalho Técnico de Conclusão - Curso Técnico SENAC</p>
-        </div>
-    </footer>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const menuBtn = document.getElementById('btn-mobile-menu-parceiros');
-            const mobileMenu = document.getElementById('mobile-menu-parceiros');
-
-            if (menuBtn && mobileMenu) {
-                menuBtn.addEventListener('click', () => {
-                    mobileMenu.classList.toggle('hidden');
-                    const icone = menuBtn.querySelector('i');
-                    if (mobileMenu.classList.contains('hidden')) {
-                        icone.className = "fa-solid fa-bars";
-                    } else {
-                        icone.className = "fa-solid fa-xmark";
-                    }
-                });
-            }
-
-            // Tratamento caso alguma imagem falhe na renderização
-            document.querySelectorAll('.onerror-fallback').forEach(img => {
-                img.onerror = function() {
-                    this.src = 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=100';
-                };
-            });
-        });
-    </script>
+        </section>
 </body>
 </html>
