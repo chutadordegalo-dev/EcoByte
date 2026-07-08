@@ -609,45 +609,55 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // LISTENER PARA O FORMULÁRIO DE CRIAR PRODUTO DIRETO NA PÁGINA LOJA.HTML
     const formProdutoLoja = document.getElementById('form-produto-loja-direto');
-    if (formProdutoLoja) {
+     if (formProdutoLoja) {
         formProdutoLoja.addEventListener('submit', async (e) => {
             e.preventDefault();
             
             const inputNome = document.getElementById('prod-loja-nome');
             const inputPreco = document.getElementById('prod-loja-preco');
             const inputQtd = document.getElementById('prod-loja-qtd');
-            const inputImg = document.getElementById('prod-loja-img');
 
             if (!inputNome || !inputPreco || !inputQtd) {
-                alert("Erro interno: Campos do formulário não localizados.");
+                alert("Erro interno: Campos do formulário não foram localizados pelo script.");
                 return;
             }
 
-            const dados = {
+            // Opcional: Obrigar a carregar imagem se você preferir
+            if (!imagemBase64) {
+                alert("⚠️ Por favor, selecione uma imagem para o produto antes de enviar.");
+                return;
+            }
+
+            const dadosProduto = {
                 nome: inputNome.value.trim(),
                 preco: parseFloat(inputPreco.value),
                 quantidade: parseInt(inputQtd.value),
-                imagem: inputImg && inputImg.value.trim() !== "" ? inputImg.value.trim() : 'img/default.png'
+                imagem: imagemBase64 // Enviando a string de texto da imagem!
             };
 
             try {
                 const resposta = await fetch('http://localhost:3000/api/admin/produtos', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(dados)
+                    body: JSON.stringify(dadosProduto)
                 });
                 
                 const resultado = await resposta.json();
+
                 if (resultado.sucesso) {
-                    alert("🎉 Produto adicionado e salvo com sucesso!");
-                    formProdutoLoja.reset();
-                    carregarEstoqueDoBanco(); // Atualiza a vitrine dinamicamente
+                    alert("🎉 Produto adicionado e salvo com sucesso no banco de dados!");
+                    formProdutoLoja.reset(); 
+                    if (imgPreview) imgPreview.classList.add('hidden'); // Esconde o preview
+                    imagemBase64 = ""; // Limpa a variável
+                    
+                    // Atualiza a vitrine de produtos automaticamente
+                    window.location.reload();
                 } else {
-                    alert("⚠️ Erro ao cadastrar produto: " + resultado.erro);
+                    alert("⚠️ Erro do Servidor: " + resultado.erro);
                 }
             } catch (err) {
-                console.error("Erro na requisição:", err);
-                alert("❌ Falha ao conectar com o servidor. O backend está rodando?");
+                console.error("Erro ao enviar produto:", err);
+                alert("❌ Falha ao conectar com o servidor. Verifique o limite de tamanho ou o terminal do Node.js.");
             }
         });
     }
