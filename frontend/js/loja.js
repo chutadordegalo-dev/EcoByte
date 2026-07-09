@@ -40,7 +40,7 @@ async function carregarEstoqueDoBanco() {
     const container = document.getElementById('container-produtos');
     
     try {
-        const res = await fetch('http://localhost:3000/api/produtos');
+        const res = await fetch('https://ecobyte-backend.up.railway.app/api/produtos');
         const produtos = await res.json();
         
         // Mapeia o array de linhas do banco para o formato de objeto esperado pelo restante do script
@@ -384,7 +384,7 @@ function finalizarCompra() {
         detalhes_cartao: detalhesCartaoObj
     };
 
-    fetch('http://localhost:3000/api/pedidos', {
+    fetch('https://ecobyte-backend.up.railway.app/api/pedidos', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(dadosEnvioAPI)
@@ -636,7 +636,7 @@ document.addEventListener('DOMContentLoaded', () => {
             };
 
             try {
-                const resposta = await fetch('http://localhost:3000/api/admin/produtos', {
+                const resposta = await fetch('https://ecobyte-backend.up.railway.app/api/admin/produtos', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(dadosProduto)
@@ -677,7 +677,7 @@ if (btnExcluir) {
         }
 
         try {
-            const resposta = await fetch('http://localhost:3000/api/admin/pontos', {
+            const resposta = await fetch('https://ecobyte-backend.up.railway.app/api/admin/pontos', {
                 method: 'DELETE',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ nome: nomePonto })
@@ -717,7 +717,7 @@ if (btnExcluirProduto) {
         if (!confirmar) return;
 
         try {
-            const resposta = await fetch('http://localhost:3000/api/admin/produtos', {
+            const resposta = await fetch('https://ecobyte-backend.up.railway.app/api/admin/produtos', {
                 method: 'DELETE',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ nome: nomeProduto })

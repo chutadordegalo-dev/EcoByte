@@ -115,7 +115,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // FUNÇÃO PARA BUSCAR OS PONTOS DO BANCO DE DADOS (MYSQL)
     async function carregarPontosDoBanco() {
         try {
-            const resposta = await fetch('http://localhost:3000/api/pontos');
+            const resposta = await fetch('https://ecobyte-backend.up.railway.app/api/pontos');
             const dados = await resposta.json();
             
             if (resposta.ok && Array.isArray(dados)) {
@@ -172,7 +172,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             try {
                 // Envia para salvar no seu banco de dados MySQL via API Node
-                const resposta = await fetch('http://localhost:3000/api/pontos', {
+                const resposta = await fetch('https://ecobyte-backend.up.railway.app/api/pontos', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(dadosPonto)
@@ -312,7 +312,7 @@ if (authForm) {
         if (modoAuthIndex === "cadastro") {
             const nome = document.getElementById('auth-nome').value.trim();
             try {
-                const resposta = await fetch('http://localhost:3000/api/auth/cadastro', {
+                const resposta = await fetch('https://ecobyte-backend.up.railway.app/api/auth/cadastro', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ nome, email, senha })
@@ -330,7 +330,7 @@ if (authForm) {
             }
         } else {
             try {
-                const resposta = await fetch('http://localhost:3000/api/auth/login', {
+                const resposta = await fetch('https://ecobyte-backend.up.railway.app/api/auth/login', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email, senha })
@@ -368,7 +368,7 @@ if (cotacaoForm) {
         };
 
         try {
-            const resposta = await fetch('http://localhost:3000/api/cotacao', {
+            const resposta = await fetch('https://ecobyte-backend.up.railway.app/api/cotacao', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(dadosCotacao)
@@ -404,7 +404,7 @@ if (cotacaoForm) {
 
             try {
                 // Envia os dados via POST para o seu servidor
-                const resposta = await fetch('http://localhost:3000/api/pontos', {
+                const resposta = await fetch('https://ecobyte-backend.up.railway.app/api/pontos', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(dadosPonto)
@@ -444,7 +444,7 @@ if (cotacaoForm) {
 
             try {
                 // Envia o pedido de exclusão via DELETE para o seu servidor
-                const resposta = await fetch('http://localhost:3000/api/pontos', {
+                const resposta = await fetch('https://ecobyte-backend.up.railway.app/api/pontos', {
                     method: 'DELETE',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ nome: nomePonto })
@@ -482,7 +482,7 @@ if (cotacaoForm) {
             };
 
             try {
-                const resposta = await fetch('http://localhost:3000/api/residuos/classificar', {
+                const resposta = await fetch('https://ecobyte-backend.up.railway.app/api/residuos/classificar', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(dados)
@@ -518,7 +518,7 @@ if (cotacaoForm) {
             };
 
             try {
-                const resposta = await fetch('http://localhost:3000/api/doacoes', {
+                const resposta = await fetch('https://ecobyte-backend.up.railway.app/api/doacoes', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(dados)
@@ -543,7 +543,7 @@ if (cotacaoForm) {
     async function carregarTabelasIniciais() {
         try {
             // 1. Carregar Classificações
-            const resClassif = await fetch('http://localhost:3000/api/residuos/classificar');
+            const resClassif = await fetch('https://ecobyte-backend.up.railway.app/api/residuos/classificar');
             const dadosClassif = await resClassif.json();
             const bodyClassif = document.getElementById('tabela-classificacoes-body');
             if(bodyClassif && Array.isArray(dadosClassif)) {
@@ -557,7 +557,7 @@ if (cotacaoForm) {
             }
 
             // 2. Carregar Doações
-            const resDoacoes = await fetch('http://localhost:3000/api/doacoes');
+            const resDoacoes = await fetch('https://ecobyte-backend.up.railway.app/api/doacoes');
             const dadosDoacoes = await resDoacoes.json();
             const bodyDoacoes = document.getElementById('tabela-doacoes-body');
             if(bodyDoacoes && Array.isArray(dadosDoacoes)) {
@@ -572,7 +572,7 @@ if (cotacaoForm) {
             }
 
             // 3. Carregar Ranking de Mais Classificados
-            const resRanking = await fetch('http://localhost:3000/api/residuos/ranking');
+            const resRanking = await fetch('https://ecobyte-backend.up.railway.app/api/residuos/ranking');
             const dadosRanking = await resRanking.json();
             const bodyRanking = document.getElementById('tabela-ranking-body');
             if(bodyRanking && Array.isArray(dadosRanking)) {

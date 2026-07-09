@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
             };
 
             try {
-                const resposta = await fetch('http://localhost:3000/api/admin/produtos', {
+                const resposta = await fetch('https://ecobyte-backend.up.railway.app/api/admin/produtos', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(dadosProduto)

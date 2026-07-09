@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         // Faz uma chamada PUT para salvar no banco MySQL
-        fetch('http://localhost:3000/api/usuarios/atualizar-nome', {
+        fetch('https://ecobyte-backend.up.railway.app/api/usuarios/atualizar-nome', {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
