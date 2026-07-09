@@ -74,31 +74,6 @@ CREATE TABLE IF NOT EXISTS pontos_coleta (
     data_cadastro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-
--- Inserção de alguns produtos fictícios para teste inicial de estoque
-USE ecobyte_db;
-
--- Limpa os dados de teste antigos antes (opcional, apenas se quiser resetar a tabela)
--- TRUNCATE TABLE produtos;
-
--- Insere os produtos reais do seu portfólio/loja EcoByte
--- 1. Limpa os registros antigos da tabela de produtos para não dar conflito
-TRUNCATE TABLE produtos;
-
--- 2. Insere os 4 produtos com a escrita EXATA que o loja.js utiliza
-INSERT INTO produtos (nome, preco, quantidade, imagem) VALUES 
-('NVIDIA GTX 1660 Super 6GB', 1200.00, 30, 'img/placa_video.png'),
-('SSD Kingston A400 480GB Sata III', 250.00, 30, 'img/ssd.png'),
-('Memória RAM HyperX Fury 8GB DDR4', 180.00, 30, 'img/ram.png'),
-('Intel Core i5-10400F 2.9GHz', 650.00, 30, 'img/processador.png');
-UPDATE produtos 
-SET quantidade = 30 
-WHERE nome IN (
-    'NVIDIA GTX 1660 Super 6GB', 
-    'SSD Kingston A400 480GB Sata III', 
-    'Memória RAM HyperX Fury 8GB DDR4', 
-    'Intel Core i5-10400F 2.9GHz'
-);
 -- Tabela para o Controle de Doações
 CREATE TABLE IF NOT EXISTS doacoes (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -119,8 +94,6 @@ CREATE TABLE IF NOT EXISTS classificacao_residuos (
     data_classificacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (id_usuario) REFERENCES usuarios(id)
 );
-
-USE ecobyte_db;
 ALTER TABLE produtos MODIFY COLUMN imagem LONGTEXT NULL;
 CREATE TABLE IF NOT EXISTS cotacoes (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -130,4 +103,19 @@ CREATE TABLE IF NOT EXISTS cotacoes (
     endereco VARCHAR(255) NOT NULL,
     descricao TEXT NOT NULL,
     data_criacao DATETIME NOT NULL
+);
+
+-- 2. Insere os 4 produtos com a escrita EXATA que o loja.js utiliza
+INSERT INTO produtos (nome, preco, quantidade, imagem) VALUES 
+('NVIDIA GTX 1660 Super 6GB', 1200.00, 30, 'img/placa_video.png'),
+('SSD Kingston A400 480GB Sata III', 250.00, 30, 'img/ssd.png'),
+('Memória RAM HyperX Fury 8GB DDR4', 180.00, 30, 'img/ram.png'),
+('Intel Core i5-10400F 2.9GHz', 650.00, 30, 'img/processador.png');
+UPDATE produtos 
+SET quantidade = 30 
+WHERE nome IN (
+    'NVIDIA GTX 1660 Super 6GB', 
+    'SSD Kingston A400 480GB Sata III', 
+    'Memória RAM HyperX Fury 8GB DDR4', 
+    'Intel Core i5-10400F 2.9GHz'
 );
