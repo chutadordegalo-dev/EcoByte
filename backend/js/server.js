@@ -204,7 +204,7 @@ app.post('/api/pedidos', (req, res) => {
 // ==========================================
 
 // Rota POST que aceita a criação vinda do admin.js (/api/admin/pontos)
-app.post('/api/admin/pontos', (req, res) => {
+app.post('/api/admin/pontos_coleta', (req, res) => {
     const { nome, endereco, lat, lng } = req.body;
 
     if (!nome || !endereco || lat === undefined || lng === undefined) {
@@ -222,7 +222,7 @@ app.post('/api/admin/pontos', (req, res) => {
     });
 });
 
-app.get('/api/pontos', (req, res) => {
+app.get('/api/pontos_coleta', (req, res) => {
     db.query("SELECT * FROM pontos_coleta", (err, resultados) => {
         if (err) return res.status(500).json({ sucesso: false, erro: err.message });
         res.json(resultados);
