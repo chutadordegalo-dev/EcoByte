@@ -28,7 +28,7 @@ let containerLista;
 const imagensCarrossel = [ // <-- Nova Imagem de Marketing EcoByte (Muito melhor!)
     "../ico/1.png", // Antiga imagem de lixeiras
     "../ico/2.png",
-    "../ico/3.png"
+  
       // Tecnologia/Servidores
 ];
 
