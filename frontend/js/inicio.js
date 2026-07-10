@@ -115,7 +115,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // FUNÇÃO PARA BUSCAR OS PONTOS DO BANCO DE DADOS (MYSQL)
     async function carregarPontosDoBanco() {
         try {
-            const resposta = await fetch('https://ecobyte-backend.up.railway.app/api/pontos');
+            const resposta = await fetch('https://ecobyte-backend.up.railway.app/api/pontos_coleta');
             const dados = await resposta.json();
             
             if (resposta.ok && Array.isArray(dados)) {
@@ -172,7 +172,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             try {
                 // Envia para salvar no seu banco de dados MySQL via API Node
-                const resposta = await fetch('https://ecobyte-backend.up.railway.app/api/pontos', {
+                const resposta = await fetch('https://ecobyte-backend.up.railway.app/api/pontos_coleta', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(dadosPonto)
@@ -404,7 +404,7 @@ if (cotacaoForm) {
 
             try {
                 // Envia os dados via POST para o seu servidor
-                const resposta = await fetch('https://ecobyte-backend.up.railway.app/api/pontos', {
+                const resposta = await fetch('https://ecobyte-backend.up.railway.app/api/pontos_coleta', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(dadosPonto)
@@ -444,7 +444,7 @@ if (cotacaoForm) {
 
             try {
                 // Envia o pedido de exclusão via DELETE para o seu servidor
-                const resposta = await fetch('https://ecobyte-backend.up.railway.app/api/pontos', {
+                const resposta = await fetch('https://ecobyte-backend.up.railway.app/api/pontos_coleta', {
                     method: 'DELETE',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ nome: nomePonto })
