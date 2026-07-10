@@ -22,6 +22,38 @@ let map;
 let marcadores = [];
 let containerLista;
 
+// ==========================================
+// LÓGICA DO CARROSSEL DE IMAGENS DE FUNDO
+// ==========================================
+const imagensCarrossel = [ // <-- Nova Imagem de Marketing EcoByte (Muito melhor!)
+    "../ico/1.png", // Antiga imagem de lixeiras
+    "../ico/2.png",
+    "../ico/3.png"
+      // Tecnologia/Servidores
+];
+
+let imagemAtualIndex = 0;
+const imgElemento = document.getElementById('carousel-bg');
+
+if (imgElemento) {
+    // Define a primeira imagem como a nova imagem de marketing imediatamente
+    imgElemento.src = imagensCarrossel[0];
+    
+    setInterval(() => {
+        // Aplica um efeito de sumiço rápido antes de trocar a imagem
+        imgElemento.style.opacity = "0";
+        
+        setTimeout(() => {
+            // Avança para a próxima imagem da lista
+            imagemAtualIndex = (imagemAtualIndex + 1) % imagensCarrossel.length;
+            imgElemento.src = imagensCarrossel[imagemAtualIndex];
+            
+            // Faz a imagem reaparecer suavemente
+            imgElemento.style.opacity = "1";
+        }, 500); // Meio segundo para trocar a imagem enquanto está invisível
+        
+    }, 3000); // 5000 milissegundos = 5 segundos por imagem
+}
 // Array com os seus pontos fixos originais que vão aparecer logo ao carregar o site
 const pontos = [
     { nome: "EcoByte Central - Eldorado", endereco: "Av. João César de Oliveira, 1200", lat: -19.9350, lng: -44.0450 },
