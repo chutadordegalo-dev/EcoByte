@@ -677,7 +677,7 @@ if (btnExcluir) {
         }
 
         try {
-            const resposta = await fetch('https://ecobyte-backend.up.railway.app/api/admin/pontos', {
+            const resposta = await fetch('https://ecobyte-backend.up.railway.app/api/pontos', {
                 method: 'DELETE',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ nome: nomePonto })

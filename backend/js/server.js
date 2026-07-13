@@ -204,7 +204,7 @@ app.post('/api/pedidos', (req, res) => {
 // ==========================================
 
 // Rota POST que aceita a criação vinda do admin.js (/api/admin/pontos)
-app.post('/api/admin/pontos', (req, res) => {
+app.post('/api/pontos', (req, res) => {
     const { nome, endereco, lat, lng } = req.body;
 
     if (!nome || !endereco || lat === undefined || lng === undefined) {
